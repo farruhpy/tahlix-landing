@@ -11,91 +11,77 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tahlix.uz">
     <link rel="canonical" href="https://tahlix.uz">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 
     <style>
-        *,
-        *::before,
-        *::after {
+        :root {
+            --bg: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #aeaeb2;
+            --accent: #007AFF;
+            --accent-light: rgba(0, 122, 255, 0.08);
+            --accent-glow: rgba(0, 122, 255, 0.25);
+            --border: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(0, 0, 0, 0.14);
+            --card-bg: #f8f9fb;
+            --dot-color: rgba(0, 122, 255, 0.45);
+            --line-color-r: 0;
+            --line-color-g: 122;
+            --line-color-b: 255;
+        }
+
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --bg: #ffffff;
-            --bg-secondary: #f8f9fb;
-            --text: #1d1d1f;
-            --text-secondary: #6e6e73;
-            --text-tertiary: #aeaeb2;
-            --border: rgba(0, 0, 0, 0.06);
-            --border-hover: rgba(0, 0, 0, 0.12);
-            --accent: #007AFF;
-            --accent-hover: #0066d6;
-            --accent-light: rgba(0, 122, 255, 0.08);
-            --accent-glow: rgba(0, 122, 255, 0.15);
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            --radius-full: 9999px;
-            --font: 'Inter', -apple-system, system-ui, sans-serif;
-            --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
         html {
-            font-size: 16px;
             scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            font-family: var(--font);
             background: var(--bg);
             color: var(--text);
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
             overflow-x: hidden;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ── Dot canvas (fixed behind everything) ── */
-        #dot-canvas {
+        /* ── Canvas ────────────────────────────────── */
+        #bg-canvas {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* ── Page wrapper ─────────────────────────── */
+        /* ── General ───────────────────────────────── */
         .page {
             position: relative;
             z-index: 1;
         }
 
         .container {
-            width: 100%;
             max-width: 960px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
-        /* ═════════════════════════════════════════════
-           SECTION 1: Hero (full viewport)
-           ═════════════════════════════════════════════ */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ── Header ───────────────────────────────── */
+        /* ═══════════════════════════════════════════════
+           HEADER (sticky top of hero)
+           ═══════════════════════════════════════════════ */
         .header {
             padding: 24px 0;
             opacity: 0;
-            transform: translateY(-14px);
-            animation: fadeDown 0.7s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeDown 0.7s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .header .container {
@@ -112,15 +98,15 @@
         }
 
         .logo-mark {
-            width: 38px;
-            height: 38px;
-            border-radius: var(--radius-md);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             background: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 16px var(--accent-glow);
-            transition: transform var(--transition);
+            box-shadow: 0 4px 14px var(--accent-glow);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .logo:hover .logo-mark {
@@ -128,29 +114,38 @@
         }
 
         .logo-mark svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             color: white;
         }
 
         .logo-text {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             letter-spacing: -0.02em;
             color: var(--text);
         }
 
         .header-badge {
-            padding: 6px 16px;
-            font-size: 0.75rem;
+            padding: 5px 14px;
+            font-size: 0.72rem;
             font-weight: 500;
             color: var(--text-tertiary);
             border: 1px solid var(--border);
-            border-radius: var(--radius-full);
+            border-radius: 100px;
             letter-spacing: 0.04em;
         }
 
-        /* ── Hero center ──────────────────────────── */
+        /* ═══════════════════════════════════════════════
+           SECTION 1: HERO (full viewport)
+           ═══════════════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
         .hero-center {
             flex: 1;
             display: flex;
@@ -158,24 +153,24 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 0 24px 60px;
+            padding: 0 24px 80px;
         }
 
         /* Typing text */
         .hero-typing {
             font-size: clamp(1.1rem, 2.8vw, 1.35rem);
             color: var(--text-secondary);
-            max-width: 520px;
+            max-width: 540px;
             line-height: 1.8;
             font-weight: 400;
-            min-height: 3.6em;
-            margin-bottom: 40px;
+            min-height: 2em;
+            margin-bottom: 36px;
         }
 
         .hero-typing .char {
             opacity: 0;
             display: inline;
-            transition: opacity 0.05s ease;
+            transition: opacity 0.04s ease;
         }
 
         .hero-typing .char.visible {
@@ -192,10 +187,10 @@
             font-weight: 600;
             color: var(--accent);
             background: var(--accent-light);
-            border-radius: var(--radius-full);
+            border-radius: 100px;
             letter-spacing: 0.01em;
             opacity: 0;
-            transform: translateY(12px);
+            transform: translateY(14px);
         }
 
         .hero-pill.visible {
@@ -227,27 +222,27 @@
         /* Scroll hint */
         .scroll-hint {
             position: absolute;
-            bottom: 28px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             opacity: 0;
-            animation: fadeUp 0.6s 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeUp 0.5s 4.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .scroll-hint span {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--text-tertiary);
             letter-spacing: 0.06em;
             text-transform: uppercase;
         }
 
         .scroll-arrow {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             color: var(--text-tertiary);
             animation: bounceDown 2s ease-in-out infinite;
         }
@@ -260,20 +255,15 @@
             }
 
             50% {
-                transform: translateY(6px);
+                transform: translateY(5px);
             }
         }
 
-        /* ═════════════════════════════════════════════
-           SECTION 2: Details (scrollable)
-           ═════════════════════════════════════════════ */
+        /* ═══════════════════════════════════════════════
+           SECTION 2: DETAILS (scrollable)
+           ═══════════════════════════════════════════════ */
         .details {
-            padding: 80px 0 40px;
-        }
-
-        .details-content {
-            max-width: 640px;
-            margin: 0 auto;
+            padding: 100px 0 60px;
         }
 
         .section-title {
@@ -282,7 +272,7 @@
             font-weight: 700;
             line-height: 1.15;
             letter-spacing: -0.03em;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             color: var(--text);
         }
 
@@ -299,6 +289,18 @@
             line-height: 1.7;
         }
 
+        /* Reveal on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* ── Feature Cards ────────────────────────── */
         .features {
             display: grid;
@@ -308,30 +310,13 @@
 
         .feature-card {
             padding: 28px 24px;
-            border-radius: var(--radius-xl);
-            background: var(--bg-secondary);
+            border-radius: 20px;
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            transition: all 0.4s var(--transition);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: default;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .feature-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .feature-card:nth-child(2).visible {
-            transition-delay: 0.1s;
-        }
-
-        .feature-card:nth-child(3).visible {
-            transition-delay: 0.2s;
         }
 
         .feature-card::after {
@@ -344,7 +329,7 @@
             background: var(--accent);
             opacity: 0;
             transition: opacity 0.3s ease;
-            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            border-radius: 20px 20px 0 0;
         }
 
         .feature-card:hover {
@@ -363,12 +348,12 @@
             justify-content: center;
             width: 32px;
             height: 32px;
-            border-radius: var(--radius-full);
+            border-radius: 100px;
             background: var(--accent);
             color: white;
             font-size: 0.8rem;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             transition: transform 0.3s ease;
         }
 
@@ -379,7 +364,7 @@
         .feature-card h3 {
             font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             letter-spacing: -0.01em;
         }
 
@@ -393,16 +378,16 @@
         .divider {
             width: 80px;
             height: 1px;
-            margin: 64px auto;
+            margin: 60px auto;
             background: var(--border-hover);
         }
 
-        /* ── Footer ───────────────────────────────── */
+        /* ── Footer / Contacts ────────────────────── */
         .footer {
-            padding: 24px 0 48px;
+            padding: 20px 0 48px;
         }
 
-        .footer .container {
+        .footer-inner {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -425,10 +410,10 @@
             color: var(--text-secondary);
             text-decoration: none;
             padding: 10px 18px;
-            border-radius: var(--radius-full);
+            border-radius: 100px;
             border: 1px solid var(--border);
             background: var(--bg);
-            transition: all var(--transition);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             font-weight: 450;
         }
 
@@ -486,7 +471,7 @@
 
             .feature-card {
                 padding: 22px 20px;
-                border-radius: var(--radius-lg);
+                border-radius: 16px;
             }
 
             .footer-contacts {
@@ -494,7 +479,7 @@
             }
 
             .details {
-                padding: 60px 0 32px;
+                padding: 60px 0 40px;
             }
         }
 
@@ -512,18 +497,22 @@
             }
 
             .hero-center {
-                padding-bottom: 40px;
+                padding-bottom: 60px;
+            }
+
+            .contact-link {
+                font-size: 0.78rem;
+                padding: 8px 14px;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Dot canvas (fixed) -->
-    <canvas id="dot-canvas"></canvas>
+    <canvas id="bg-canvas"></canvas>
 
     <div class="page">
-        <!-- ═══ Section 1: Hero (full viewport) ═══ -->
+        <!-- ═══ HERO (full viewport) ═══ -->
         <section class="hero">
             <header class="header">
                 <div class="container">
@@ -558,31 +547,29 @@
             </div>
         </section>
 
-        <!-- ═══ Section 2: Details (scroll down) ═══ -->
+        <!-- ═══ DETAILS (scroll down) ═══ -->
         <section class="details">
             <div class="container">
-                <div class="details-content">
-                    <h1 class="section-title reveal-fade">
-                        Ваши продажи.<br><span class="accent">Умный анализ.</span>
-                    </h1>
-                    <p class="section-sub reveal-fade">
-                        Загрузите данные — получите готовую аналитику
-                        с графиками, прогнозами и рекомендациями.
-                    </p>
-                </div>
+                <h1 class="section-title reveal">
+                    Ваши продажи.<br><span class="accent">Умный анализ.</span>
+                </h1>
+                <p class="section-sub reveal">
+                    Загрузите данные — получите готовую аналитику
+                    с графиками, прогнозами и рекомендациями.
+                </p>
 
                 <div class="features">
-                    <div class="feature-card">
+                    <div class="feature-card reveal">
                         <div class="feature-num">1</div>
                         <h3>Аналитика</h3>
                         <p>Мгновенный анализ продаж в диалоге с AI-ассистентом</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card reveal">
                         <div class="feature-num">2</div>
                         <h3>Прогнозы</h3>
                         <p>Тренды и рекомендации на основе ваших данных</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card reveal">
                         <div class="feature-num">3</div>
                         <h3>Рост</h3>
                         <p>Находите скрытые возможности для роста бизнеса</p>
@@ -592,7 +579,7 @@
                 <div class="divider"></div>
 
                 <footer class="footer">
-                    <div class="container">
+                    <div class="footer-inner">
                         <div class="footer-contacts">
                             <a href="mailto:farruhbek@tahlix.uz" class="contact-link">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -631,18 +618,15 @@
 
     <script>
         (() => {
-            // ═══════════════════════════════════════════════════
+            // ═══════════════════════════════════════════════
             // 1. TYPING ANIMATION
-            // ═══════════════════════════════════════════════════
+            // ═══════════════════════════════════════════════
             const typingEl = document.getElementById('hero-typing');
             const pillEl = document.getElementById('hero-pill');
             const text = 'Умная платформа аналитики продаж для вашего бизнеса — с AI-ассистентом, графиками и рекомендациями.';
 
-            // Wrap each character in a span
             typingEl.innerHTML = text.split('').map(ch =>
-                ch === ' '
-                    ? ' '
-                    : `<span class="char">${ch}</span>`
+                ch === ' ' ? ' ' : `<span class="char">${ch}</span>`
             ).join('');
 
             const chars = typingEl.querySelectorAll('.char');
@@ -652,233 +636,171 @@
                 if (charIdx < chars.length) {
                     chars[charIdx].classList.add('visible');
                     charIdx++;
-                    setTimeout(typeNext, 28 + Math.random() * 18);
+                    setTimeout(typeNext, 26 + Math.random() * 20);
                 } else {
-                    // Typing done → show pill
-                    setTimeout(() => {
-                        pillEl.classList.add('visible');
-                    }, 400);
+                    setTimeout(() => pillEl.classList.add('visible'), 400);
                 }
             }
 
-            // Start typing after a brief delay
-            setTimeout(typeNext, 800);
+            setTimeout(typeNext, 700);
 
-            // ═══════════════════════════════════════════════════
-            // 2. SCROLL REVEAL (for section 2 elements)
-            // ═══════════════════════════════════════════════════
+            // ═══════════════════════════════════════════════
+            // 2. SCROLL REVEAL
+            // ═══════════════════════════════════════════════
             const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(e => {
-                    if (e.isIntersecting) e.target.classList.add('visible');
-                });
-            }, { threshold: 0.15 });
-
-            document.querySelectorAll('.feature-card, .reveal-fade').forEach(el => {
-                revealObserver.observe(el);
-            });
-
-            // reveal-fade helper
-            document.querySelectorAll('.reveal-fade').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1)';
-            });
-
-            const revFadeObs = new IntersectionObserver((entries) => {
-                entries.forEach(e => {
+                entries.forEach((e, i) => {
                     if (e.isIntersecting) {
-                        e.target.style.opacity = '1';
-                        e.target.style.transform = 'translateY(0)';
+                        setTimeout(() => e.target.classList.add('visible'), i * 80);
                     }
                 });
-            }, { threshold: 0.15 });
+            }, { threshold: 0.12 });
 
-            document.querySelectorAll('.reveal-fade').forEach(el => revFadeObs.observe(el));
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-            // ═══════════════════════════════════════════════════
-            // 3. INTERACTIVE DOT NETWORK (Google Antigravity style)
-            // ═══════════════════════════════════════════════════
-            const canvas = document.getElementById('dot-canvas');
+            // ═══════════════════════════════════════════════
+            // 3. PARTICLE NETWORK (your code + white bg fix)
+            // ═══════════════════════════════════════════════
+            const canvas = document.getElementById('bg-canvas');
             const ctx = canvas.getContext('2d');
 
-            let W, H, dpr;
-            const mouse = { x: -9999, y: -9999, active: false };
+            let particles = [];
+            const mouse = { x: null, y: null, radius: 150 };
 
-            // Config
-            const NODE_COUNT = 130;
-            const NODE_RADIUS = 2;
-            const CONNECT_DIST = 150;
-            const MOUSE_RADIUS = 140;
-            const REPULSE_STRENGTH = 800;    // stronger = faster push
-            const LINE_COLOR_R = 0, LINE_COLOR_G = 122, LINE_COLOR_B = 255;
-            const LINE_ALPHA = 0.15;
-            const NODE_COLOR = `rgba(${LINE_COLOR_R}, ${LINE_COLOR_G}, ${LINE_COLOR_B}, 0.35)`;
-            const SPEED = 0.4;
+            // Accent color for dots & lines on white bg
+            const DR = 0, DG = 122, DB = 255;  // #007AFF
 
-            const nodes = [];
-
-            function resize() {
-                dpr = Math.min(window.devicePixelRatio || 1, 2);
-                W = window.innerWidth;
-                H = window.innerHeight;
-                canvas.width = W * dpr;
-                canvas.height = H * dpr;
-                canvas.style.width = W + 'px';
-                canvas.style.height = H + 'px';
-                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            }
-
-            function createNode() {
-                const angle = Math.random() * Math.PI * 2;
-                return {
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    vx: Math.cos(angle) * SPEED * (0.5 + Math.random()),
-                    vy: Math.sin(angle) * SPEED * (0.5 + Math.random()),
-                };
-            }
-
-            function init() {
-                resize();
-                nodes.length = 0;
-                for (let i = 0; i < NODE_COUNT; i++) {
-                    nodes.push(createNode());
-                }
-            }
-
-            function update() {
-                for (const n of nodes) {
-                    // ── Mouse repulsion ──
-                    if (mouse.active) {
-                        const dx = n.x - mouse.x;
-                        const dy = n.y - mouse.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < MOUSE_RADIUS && dist > 0) {
-                            const force = REPULSE_STRENGTH / (dist * dist);
-                            n.vx += (dx / dist) * force;
-                            n.vy += (dy / dist) * force;
-                        }
-                    }
-
-                    // ── Friction (brings speed back to baseline) ──
-                    n.vx *= 0.98;
-                    n.vy *= 0.98;
-
-                    // ── Ensure minimum drift speed ──
-                    const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
-                    if (speed < SPEED * 0.3) {
-                        const angle = Math.atan2(n.vy, n.vx);
-                        n.vx = Math.cos(angle) * SPEED * 0.3;
-                        n.vy = Math.sin(angle) * SPEED * 0.3;
-                    }
-
-                    // ── Move ──
-                    n.x += n.vx;
-                    n.y += n.vy;
-
-                    // ── Wrap edges (with padding) ──
-                    const pad = 30;
-                    if (n.x < -pad) n.x = W + pad;
-                    if (n.x > W + pad) n.x = -pad;
-                    if (n.y < -pad) n.y = H + pad;
-                    if (n.y > H + pad) n.y = -pad;
-                }
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, W, H);
-
-                // ── Draw connection lines ──
-                for (let i = 0; i < nodes.length; i++) {
-                    for (let j = i + 1; j < nodes.length; j++) {
-                        const a = nodes[i], b = nodes[j];
-                        const dx = a.x - b.x, dy = a.y - b.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < CONNECT_DIST) {
-                            const alpha = LINE_ALPHA * (1 - dist / CONNECT_DIST);
-                            ctx.beginPath();
-                            ctx.moveTo(a.x, a.y);
-                            ctx.lineTo(b.x, b.y);
-                            ctx.strokeStyle = `rgba(${LINE_COLOR_R}, ${LINE_COLOR_G}, ${LINE_COLOR_B}, ${alpha})`;
-                            ctx.lineWidth = 0.8;
-                            ctx.stroke();
-                        }
-                    }
-                }
-
-                // ── Draw mouse connections ──
-                if (mouse.active) {
-                    for (const n of nodes) {
-                        const dx = n.x - mouse.x, dy = n.y - mouse.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < CONNECT_DIST) {
-                            const alpha = LINE_ALPHA * 1.5 * (1 - dist / CONNECT_DIST);
-                            ctx.beginPath();
-                            ctx.moveTo(mouse.x, mouse.y);
-                            ctx.lineTo(n.x, n.y);
-                            ctx.strokeStyle = `rgba(${LINE_COLOR_R}, ${LINE_COLOR_G}, ${LINE_COLOR_B}, ${alpha})`;
-                            ctx.lineWidth = 0.8;
-                            ctx.stroke();
-                        }
-                    }
-                }
-
-                // ── Draw nodes ──
-                ctx.fillStyle = NODE_COLOR;
-                for (const n of nodes) {
-                    ctx.beginPath();
-                    ctx.arc(n.x, n.y, NODE_RADIUS, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-
-            function loop() {
-                update();
-                draw();
-                requestAnimationFrame(loop);
-            }
-
-            // ── Events ──
-            window.addEventListener('resize', resize);
-
-            document.addEventListener('mousemove', (e) => {
+            window.addEventListener('mousemove', (e) => {
                 mouse.x = e.clientX;
                 mouse.y = e.clientY;
-                mouse.active = true;
             });
 
-            document.addEventListener('mouseleave', () => {
-                mouse.active = false;
-                mouse.x = -9999;
-                mouse.y = -9999;
+            window.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
             });
 
-            // Mobile touch
+            // Touch support
             document.addEventListener('touchstart', (e) => {
-                const t = e.touches[0];
-                mouse.x = t.clientX;
-                mouse.y = t.clientY;
-                mouse.active = true;
+                mouse.x = e.touches[0].clientX;
+                mouse.y = e.touches[0].clientY;
             }, { passive: true });
 
             document.addEventListener('touchmove', (e) => {
-                const t = e.touches[0];
-                mouse.x = t.clientX;
-                mouse.y = t.clientY;
+                mouse.x = e.touches[0].clientX;
+                mouse.y = e.touches[0].clientY;
             }, { passive: true });
 
             document.addEventListener('touchend', () => {
-                mouse.active = false;
-                mouse.x = -9999;
-                mouse.y = -9999;
+                mouse.x = null;
+                mouse.y = null;
             });
 
-            // ── Start ──
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', () => { resize(); init(); });
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 1.8 + 0.8;
+                    this.density = (Math.random() * 30) + 1;
+                    this.speedX = (Math.random() - 0.5) * 0.6;
+                    this.speedY = (Math.random() - 0.5) * 0.6;
+                }
+
+                draw() {
+                    ctx.fillStyle = `rgba(${DR}, ${DG}, ${DB}, 0.4)`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                    if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+
+                    // Mouse repulsion
+                    if (mouse.x != null && mouse.y != null) {
+                        let dx = mouse.x - this.x;
+                        let dy = mouse.y - this.y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < mouse.radius) {
+                            const fx = dx / dist;
+                            const fy = dy / dist;
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= fx * force * this.density;
+                            this.y -= fy * force * this.density;
+                        }
+                    }
+                }
+            }
+
+            function init() {
+                particles = [];
+                const count = Math.min((canvas.width * canvas.height) / 8000, 200);
+                for (let i = 0; i < count; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function connect() {
+                const maxDist = 140;
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDist) {
+                            const opacity = (1 - dist / maxDist) * 0.12;
+                            ctx.strokeStyle = `rgba(${DR}, ${DG}, ${DB}, ${opacity})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Mouse connections
+                    if (mouse.x != null && mouse.y != null) {
+                        const dx = particles[a].x - mouse.x;
+                        const dy = particles[a].y - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDist) {
+                            const opacity = (1 - dist / maxDist) * 0.18;
+                            ctx.strokeStyle = `rgba(${DR}, ${DG}, ${DB}, ${opacity})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.beginPath();
+                            ctx.moveTo(mouse.x, mouse.y);
+                            ctx.lineTo(particles[a].x, particles[a].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (const p of particles) {
+                    p.update();
+                    p.draw();
+                }
+                connect();
+                requestAnimationFrame(animate);
+            }
+
             init();
-            loop();
+            animate();
         })();
     </script>
 </body>
