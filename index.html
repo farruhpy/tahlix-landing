@@ -56,12 +56,11 @@
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
         }
 
-        /* ── Dot canvas ───────────────────────────── */
+        /* ── Dot canvas (fixed behind everything) ── */
         #dot-canvas {
             position: fixed;
             inset: 0;
@@ -69,13 +68,10 @@
             pointer-events: none;
         }
 
-        /* ── Layout ───────────────────────────────── */
+        /* ── Page wrapper ─────────────────────────── */
         .page {
             position: relative;
             z-index: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
 
         .container {
@@ -85,10 +81,21 @@
             padding: 0 24px;
         }
 
+        /* ═════════════════════════════════════════════
+           SECTION 1: Hero (full viewport)
+           ═════════════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         /* ── Header ───────────────────────────────── */
         .header {
             padding: 24px 0;
-            animation: fadeDown 0.7s var(--transition) both;
+            opacity: 0;
+            transform: translateY(-14px);
+            animation: fadeDown 0.7s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .header .container {
@@ -143,34 +150,56 @@
             letter-spacing: 0.04em;
         }
 
-        /* ── Hero ─────────────────────────────────── */
-        .hero {
+        /* ── Hero center ──────────────────────────── */
+        .hero-center {
             flex: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 0 48px;
-        }
-
-        .hero-content {
             text-align: center;
-            max-width: 640px;
+            padding: 0 24px 60px;
         }
 
-        /* Coming soon — bigger, above everything */
+        /* Typing text */
+        .hero-typing {
+            font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+            color: var(--text-secondary);
+            max-width: 520px;
+            line-height: 1.8;
+            font-weight: 400;
+            min-height: 3.6em;
+            margin-bottom: 40px;
+        }
+
+        .hero-typing .char {
+            opacity: 0;
+            display: inline;
+            transition: opacity 0.05s ease;
+        }
+
+        .hero-typing .char.visible {
+            opacity: 1;
+        }
+
+        /* Coming soon pill */
         .hero-pill {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 26px;
-            font-size: 0.95rem;
+            padding: 12px 28px;
+            font-size: 1rem;
             font-weight: 600;
             color: var(--accent);
             background: var(--accent-light);
             border-radius: var(--radius-full);
-            margin-bottom: 36px;
             letter-spacing: 0.01em;
-            animation: fadeUp 0.7s 0.1s var(--transition) both;
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        .hero-pill.visible {
+            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .pill-dot {
@@ -195,28 +224,79 @@
             }
         }
 
-        .hero h1 {
-            font-size: clamp(2.2rem, 5.5vw, 3.6rem);
-            font-weight: 700;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 20px;
-            color: var(--text);
-            animation: fadeUp 0.7s 0.2s var(--transition) both;
+        /* Scroll hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            animation: fadeUp 0.6s 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .hero h1 .accent {
+        .scroll-hint span {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .scroll-arrow {
+            width: 20px;
+            height: 20px;
+            color: var(--text-tertiary);
+            animation: bounceDown 2s ease-in-out infinite;
+        }
+
+        @keyframes bounceDown {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(6px);
+            }
+        }
+
+        /* ═════════════════════════════════════════════
+           SECTION 2: Details (scrollable)
+           ═════════════════════════════════════════════ */
+        .details {
+            padding: 80px 0 40px;
+        }
+
+        .details-content {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .section-title .accent {
             color: var(--accent);
         }
 
-        .hero-sub {
-            font-size: clamp(1rem, 2vw, 1.15rem);
+        .section-sub {
+            text-align: center;
+            font-size: 1rem;
             color: var(--text-secondary);
-            max-width: 480px;
-            margin: 0 auto 48px;
-            font-weight: 400;
+            max-width: 460px;
+            margin: 0 auto 56px;
             line-height: 1.7;
-            animation: fadeUp 0.7s 0.3s var(--transition) both;
         }
 
         /* ── Feature Cards ────────────────────────── */
@@ -224,7 +304,6 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 14px;
-            animation: fadeUp 0.7s 0.45s var(--transition) both;
         }
 
         .feature-card {
@@ -236,6 +315,23 @@
             cursor: default;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .feature-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:nth-child(2).visible {
+            transition-delay: 0.1s;
+        }
+
+        .feature-card:nth-child(3).visible {
+            transition-delay: 0.2s;
         }
 
         .feature-card::after {
@@ -285,7 +381,6 @@
             font-weight: 600;
             margin-bottom: 8px;
             letter-spacing: -0.01em;
-            color: var(--text);
         }
 
         .feature-card p {
@@ -298,15 +393,13 @@
         .divider {
             width: 80px;
             height: 1px;
-            margin: 56px auto;
+            margin: 64px auto;
             background: var(--border-hover);
-            animation: fadeUp 0.7s 0.55s var(--transition) both;
         }
 
         /* ── Footer ───────────────────────────────── */
         .footer {
-            padding: 24px 0 40px;
-            animation: fadeUp 0.7s 0.6s var(--transition) both;
+            padding: 24px 0 48px;
         }
 
         .footer .container {
@@ -391,14 +484,6 @@
                 gap: 10px;
             }
 
-            .hero {
-                padding: 20px 0 36px;
-            }
-
-            .hero-sub {
-                margin-bottom: 36px;
-            }
-
             .feature-card {
                 padding: 22px 20px;
                 border-radius: var(--radius-lg);
@@ -408,8 +493,8 @@
                 gap: 8px;
             }
 
-            .divider {
-                margin: 40px auto;
+            .details {
+                padding: 60px 0 32px;
             }
         }
 
@@ -425,238 +510,327 @@
             .header-badge {
                 display: none;
             }
+
+            .hero-center {
+                padding-bottom: 40px;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Dot canvas (fixed) -->
     <canvas id="dot-canvas"></canvas>
 
     <div class="page">
-        <header class="header">
-            <div class="container">
-                <a href="/" class="logo">
-                    <div class="logo-mark">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 3v18h18" />
-                            <path d="m19 9-5 5-4-4-3 3" />
-                        </svg>
-                    </div>
-                    <span class="logo-text">Tahlix</span>
-                </a>
-                <span class="header-badge">tahlix.uz</span>
+        <!-- ═══ Section 1: Hero (full viewport) ═══ -->
+        <section class="hero">
+            <header class="header">
+                <div class="container">
+                    <a href="/" class="logo">
+                        <div class="logo-mark">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3v18h18" />
+                                <path d="m19 9-5 5-4-4-3 3" />
+                            </svg>
+                        </div>
+                        <span class="logo-text">Tahlix</span>
+                    </a>
+                    <span class="header-badge">tahlix.uz</span>
+                </div>
+            </header>
+
+            <div class="hero-center">
+                <p class="hero-typing" id="hero-typing"></p>
+                <div class="hero-pill" id="hero-pill">
+                    <span class="pill-dot"></span>
+                    Скоро запуск
+                </div>
             </div>
-        </header>
 
-        <main class="hero">
+            <div class="scroll-hint">
+                <span>Подробнее</span>
+                <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m6 9 6 6 6-6" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- ═══ Section 2: Details (scroll down) ═══ -->
+        <section class="details">
             <div class="container">
-                <div class="hero-content">
-                    <div class="hero-pill">
-                        <span class="pill-dot"></span>
-                        Скоро запуск
-                    </div>
-
-                    <h1>Ваши продажи.<br><span class="accent">Умный анализ.</span></h1>
-
-                    <p class="hero-sub">
+                <div class="details-content">
+                    <h1 class="section-title reveal-fade">
+                        Ваши продажи.<br><span class="accent">Умный анализ.</span>
+                    </h1>
+                    <p class="section-sub reveal-fade">
                         Загрузите данные — получите готовую аналитику
                         с графиками, прогнозами и рекомендациями.
-                        Без сложных настроек.
                     </p>
+                </div>
 
-                    <div class="features">
-                        <div class="feature-card">
-                            <div class="feature-num">1</div>
-                            <h3>Аналитика</h3>
-                            <p>Мгновенный анализ продаж в диалоге с AI-ассистентом</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-num">2</div>
-                            <h3>Прогнозы</h3>
-                            <p>Тренды и рекомендации на основе ваших данных</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-num">3</div>
-                            <h3>Рост</h3>
-                            <p>Находите скрытые возможности для роста бизнеса</p>
-                        </div>
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-num">1</div>
+                        <h3>Аналитика</h3>
+                        <p>Мгновенный анализ продаж в диалоге с AI-ассистентом</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-num">2</div>
+                        <h3>Прогнозы</h3>
+                        <p>Тренды и рекомендации на основе ваших данных</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-num">3</div>
+                        <h3>Рост</h3>
+                        <p>Находите скрытые возможности для роста бизнеса</p>
                     </div>
                 </div>
-            </div>
-        </main>
 
-        <div class="divider"></div>
+                <div class="divider"></div>
 
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-contacts">
-                    <a href="mailto:farruhbek@tahlix.uz" class="contact-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="20" height="16" x="2" y="4" rx="2" />
-                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                        </svg>
-                        farruhbek@tahlix.uz
-                    </a>
-                    <a href="https://t.me/farrvhbeck" target="_blank" rel="noopener" class="contact-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m22 2-7 20-4-9-9-4z" />
-                            <path d="M22 2 11 13" />
-                        </svg>
-                        Telegram
-                    </a>
-                    <a href="tel:+998907201646" class="contact-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +998 90 720 16 46
-                    </a>
-                </div>
-                <p class="footer-copy">© 2026 Tahlix. Все права защищены.</p>
+                <footer class="footer">
+                    <div class="container">
+                        <div class="footer-contacts">
+                            <a href="mailto:farruhbek@tahlix.uz" class="contact-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                </svg>
+                                farruhbek@tahlix.uz
+                            </a>
+                            <a href="https://t.me/farrvhbeck" target="_blank" rel="noopener" class="contact-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="m22 2-7 20-4-9-9-4z" />
+                                    <path d="M22 2 11 13" />
+                                </svg>
+                                Telegram
+                            </a>
+                            <a href="tel:+998907201646" class="contact-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                </svg>
+                                +998 90 720 16 46
+                            </a>
+                        </div>
+                        <p class="footer-copy">© 2026 Tahlix. Все права защищены.</p>
+                    </div>
+                </footer>
             </div>
-        </footer>
+        </section>
     </div>
 
     <script>
         (() => {
+            // ═══════════════════════════════════════════════════
+            // 1. TYPING ANIMATION
+            // ═══════════════════════════════════════════════════
+            const typingEl = document.getElementById('hero-typing');
+            const pillEl = document.getElementById('hero-pill');
+            const text = 'Умная платформа аналитики продаж для вашего бизнеса — с AI-ассистентом, графиками и рекомендациями.';
+
+            // Wrap each character in a span
+            typingEl.innerHTML = text.split('').map(ch =>
+                ch === ' '
+                    ? ' '
+                    : `<span class="char">${ch}</span>`
+            ).join('');
+
+            const chars = typingEl.querySelectorAll('.char');
+            let charIdx = 0;
+
+            function typeNext() {
+                if (charIdx < chars.length) {
+                    chars[charIdx].classList.add('visible');
+                    charIdx++;
+                    setTimeout(typeNext, 28 + Math.random() * 18);
+                } else {
+                    // Typing done → show pill
+                    setTimeout(() => {
+                        pillEl.classList.add('visible');
+                    }, 400);
+                }
+            }
+
+            // Start typing after a brief delay
+            setTimeout(typeNext, 800);
+
+            // ═══════════════════════════════════════════════════
+            // 2. SCROLL REVEAL (for section 2 elements)
+            // ═══════════════════════════════════════════════════
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) e.target.classList.add('visible');
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.feature-card, .reveal-fade').forEach(el => {
+                revealObserver.observe(el);
+            });
+
+            // reveal-fade helper
+            document.querySelectorAll('.reveal-fade').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1)';
+            });
+
+            const revFadeObs = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        e.target.style.opacity = '1';
+                        e.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.reveal-fade').forEach(el => revFadeObs.observe(el));
+
+            // ═══════════════════════════════════════════════════
+            // 3. INTERACTIVE DOT NETWORK (Google Antigravity style)
+            // ═══════════════════════════════════════════════════
             const canvas = document.getElementById('dot-canvas');
             const ctx = canvas.getContext('2d');
 
             let W, H, dpr;
-            let mouseX = -9999, mouseY = -9999;
-            const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+            const mouse = { x: -9999, y: -9999, active: false };
 
-            // ── Config ─────────────────────────────────
-            const GRID_SPACING = isMobile ? 28 : 24;   // distance between dots
-            const BASE_RADIUS = 1;                       // resting dot size (nearly invisible)
-            const BASE_ALPHA = 0.04;                     // resting opacity (barely visible)
-            const MAX_RADIUS = isMobile ? 4.5 : 5.5;    // max inflated size
-            const MAX_ALPHA = 0.45;                      // max opacity when activated
-            const INFLUENCE = isMobile ? 120 : 180;      // cursor influence radius in px
-            const EASE = 0.08;                            // animation ease factor
-            const DOT_COLOR = '0, 122, 255';             // accent blue (RGB)
+            // Config
+            const NODE_COUNT = 130;
+            const NODE_RADIUS = 2;
+            const CONNECT_DIST = 150;
+            const MOUSE_RADIUS = 140;
+            const REPULSE_STRENGTH = 800;    // stronger = faster push
+            const LINE_COLOR_R = 0, LINE_COLOR_G = 122, LINE_COLOR_B = 255;
+            const LINE_ALPHA = 0.15;
+            const NODE_COLOR = `rgba(${LINE_COLOR_R}, ${LINE_COLOR_G}, ${LINE_COLOR_B}, 0.35)`;
+            const SPEED = 0.4;
 
-            let dots = [];
-
-            // Mobile: simulated pointer that wanders
-            let simX = 0, simY = 0, simVX = 0, simVY = 0;
-            let simTarget = { x: 0, y: 0 };
-            let touchActive = false;
+            const nodes = [];
 
             function resize() {
                 dpr = Math.min(window.devicePixelRatio || 1, 2);
                 W = window.innerWidth;
-                H = document.documentElement.scrollHeight;
+                H = window.innerHeight;
                 canvas.width = W * dpr;
                 canvas.height = H * dpr;
                 canvas.style.width = W + 'px';
                 canvas.style.height = H + 'px';
                 ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-                buildGrid();
             }
 
-            function buildGrid() {
-                dots = [];
-                const cols = Math.ceil(W / GRID_SPACING) + 1;
-                const rows = Math.ceil(H / GRID_SPACING) + 1;
-                const offsetX = (W - (cols - 1) * GRID_SPACING) / 2;
-                const offsetY = (H - (rows - 1) * GRID_SPACING) / 2;
+            function createNode() {
+                const angle = Math.random() * Math.PI * 2;
+                return {
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    vx: Math.cos(angle) * SPEED * (0.5 + Math.random()),
+                    vy: Math.sin(angle) * SPEED * (0.5 + Math.random()),
+                };
+            }
 
-                for (let r = 0; r < rows; r++) {
-                    for (let c = 0; c < cols; c++) {
-                        dots.push({
-                            x: offsetX + c * GRID_SPACING,
-                            y: offsetY + r * GRID_SPACING,
-                            currentR: BASE_RADIUS,
-                            currentA: BASE_ALPHA,
-                        });
-                    }
+            function init() {
+                resize();
+                nodes.length = 0;
+                for (let i = 0; i < NODE_COUNT; i++) {
+                    nodes.push(createNode());
                 }
-            }
-
-            function pickNewSimTarget() {
-                simTarget.x = 80 + Math.random() * (W - 160);
-                simTarget.y = 80 + Math.random() * (H - 160);
-            }
-
-            function updateSimPointer() {
-                if (touchActive) return; // touch overrides
-
-                // Steer toward target
-                const dx = simTarget.x - simX;
-                const dy = simTarget.y - simY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < 60) pickNewSimTarget();
-
-                simVX += (dx / dist) * 0.15;
-                simVY += (dy / dist) * 0.15;
-
-                // Damping
-                simVX *= 0.97;
-                simVY *= 0.97;
-
-                // Clamp speed
-                const speed = Math.sqrt(simVX * simVX + simVY * simVY);
-                const maxSpeed = 2.5;
-                if (speed > maxSpeed) {
-                    simVX = (simVX / speed) * maxSpeed;
-                    simVY = (simVY / speed) * maxSpeed;
-                }
-
-                simX += simVX;
-                simY += simVY;
-
-                mouseX = simX;
-                mouseY = simY;
             }
 
             function update() {
-                if (isMobile) updateSimPointer();
+                for (const n of nodes) {
+                    // ── Mouse repulsion ──
+                    if (mouse.active) {
+                        const dx = n.x - mouse.x;
+                        const dy = n.y - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
 
-                const scrollY = window.scrollY;
+                        if (dist < MOUSE_RADIUS && dist > 0) {
+                            const force = REPULSE_STRENGTH / (dist * dist);
+                            n.vx += (dx / dist) * force;
+                            n.vy += (dy / dist) * force;
+                        }
+                    }
 
-                for (const d of dots) {
-                    const screenY = d.y - scrollY;
-                    const dx = mouseX - d.x;
-                    const dy = mouseY - screenY;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    // ── Friction (brings speed back to baseline) ──
+                    n.vx *= 0.98;
+                    n.vy *= 0.98;
 
-                    // Influence factor: 0 (far) → 1 (at cursor)
-                    const t = Math.max(0, 1 - dist / INFLUENCE);
-                    // Smooth cubic falloff for organic feel
-                    const factor = t * t * (3 - 2 * t); // smoothstep
+                    // ── Ensure minimum drift speed ──
+                    const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+                    if (speed < SPEED * 0.3) {
+                        const angle = Math.atan2(n.vy, n.vx);
+                        n.vx = Math.cos(angle) * SPEED * 0.3;
+                        n.vy = Math.sin(angle) * SPEED * 0.3;
+                    }
 
-                    const targetR = BASE_RADIUS + (MAX_RADIUS - BASE_RADIUS) * factor;
-                    const targetA = BASE_ALPHA + (MAX_ALPHA - BASE_ALPHA) * factor;
+                    // ── Move ──
+                    n.x += n.vx;
+                    n.y += n.vy;
 
-                    // Ease toward target
-                    d.currentR += (targetR - d.currentR) * EASE;
-                    d.currentA += (targetA - d.currentA) * EASE;
+                    // ── Wrap edges (with padding) ──
+                    const pad = 30;
+                    if (n.x < -pad) n.x = W + pad;
+                    if (n.x > W + pad) n.x = -pad;
+                    if (n.y < -pad) n.y = H + pad;
+                    if (n.y > H + pad) n.y = -pad;
                 }
             }
 
             function draw() {
                 ctx.clearRect(0, 0, W, H);
 
-                const scrollY = window.scrollY;
-                // Only draw dots visible on screen (perf optimization)
-                const viewTop = scrollY - 20;
-                const viewBottom = scrollY + window.innerHeight + 20;
+                // ── Draw connection lines ──
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const a = nodes[i], b = nodes[j];
+                        const dx = a.x - b.x, dy = a.y - b.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
 
-                for (const d of dots) {
-                    if (d.y < viewTop || d.y > viewBottom) continue;
-                    if (d.currentA < 0.01) continue;
+                        if (dist < CONNECT_DIST) {
+                            const alpha = LINE_ALPHA * (1 - dist / CONNECT_DIST);
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.strokeStyle = `rgba(${LINE_COLOR_R}, ${LINE_COLOR_G}, ${LINE_COLOR_B}, ${alpha})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                }
 
-                    const screenY = d.y - scrollY;
+                // ── Draw mouse connections ──
+                if (mouse.active) {
+                    for (const n of nodes) {
+                        const dx = n.x - mouse.x, dy = n.y - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
 
+                        if (dist < CONNECT_DIST) {
+                            const alpha = LINE_ALPHA * 1.5 * (1 - dist / CONNECT_DIST);
+                            ctx.beginPath();
+                            ctx.moveTo(mouse.x, mouse.y);
+                            ctx.lineTo(n.x, n.y);
+                            ctx.strokeStyle = `rgba(${LINE_COLOR_R}, ${LINE_COLOR_G}, ${LINE_COLOR_B}, ${alpha})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // ── Draw nodes ──
+                ctx.fillStyle = NODE_COLOR;
+                for (const n of nodes) {
                     ctx.beginPath();
-                    ctx.arc(d.x, screenY, d.currentR, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(${DOT_COLOR}, ${d.currentA})`;
+                    ctx.arc(n.x, n.y, NODE_RADIUS, 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
@@ -667,52 +841,43 @@
                 requestAnimationFrame(loop);
             }
 
-            // ── Events ─────────────────────────────────
-            window.addEventListener('resize', () => {
-                resize();
+            // ── Events ──
+            window.addEventListener('resize', resize);
+
+            document.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                mouse.active = true;
             });
 
-            window.addEventListener('scroll', () => {
-                // Canvas stays fixed, but dots are in page-space
-                // We just need to recalculate during draw
+            document.addEventListener('mouseleave', () => {
+                mouse.active = false;
+                mouse.x = -9999;
+                mouse.y = -9999;
+            });
+
+            // Mobile touch
+            document.addEventListener('touchstart', (e) => {
+                const t = e.touches[0];
+                mouse.x = t.clientX;
+                mouse.y = t.clientY;
+                mouse.active = true;
             }, { passive: true });
 
-            if (!isMobile) {
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                });
-            } else {
-                // Touch overrides the simulated pointer temporarily
-                document.addEventListener('touchstart', (e) => {
-                    touchActive = true;
-                    const t = e.touches[0];
-                    mouseX = t.clientX;
-                    mouseY = t.clientY;
-                }, { passive: true });
+            document.addEventListener('touchmove', (e) => {
+                const t = e.touches[0];
+                mouse.x = t.clientX;
+                mouse.y = t.clientY;
+            }, { passive: true });
 
-                document.addEventListener('touchmove', (e) => {
-                    const t = e.touches[0];
-                    mouseX = t.clientX;
-                    mouseY = t.clientY;
-                }, { passive: true });
+            document.addEventListener('touchend', () => {
+                mouse.active = false;
+                mouse.x = -9999;
+                mouse.y = -9999;
+            });
 
-                document.addEventListener('touchend', () => {
-                    touchActive = false;
-                    // Resume simulated pointer from current position
-                    simX = mouseX;
-                    simY = mouseY;
-                    pickNewSimTarget();
-                });
-            }
-
-            // ── Init ───────────────────────────────────
-            resize();
-            if (isMobile) {
-                simX = W / 2;
-                simY = H / 3;
-                pickNewSimTarget();
-            }
+            // ── Start ──
+            init();
             loop();
         })();
     </script>
