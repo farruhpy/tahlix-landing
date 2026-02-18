@@ -18,9 +18,6 @@
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 
     <style>
-        /* ═══════════════════════════════════════════════
-           Reset & Variables
-           ═══════════════════════════════════════════════ */
         *,
         *::before,
         *::after {
@@ -32,7 +29,6 @@
         :root {
             --bg: #ffffff;
             --bg-secondary: #f8f9fb;
-            --bg-card: rgba(255, 255, 255, 0.85);
             --text: #1d1d1f;
             --text-secondary: #6e6e73;
             --text-tertiary: #aeaeb2;
@@ -45,7 +41,6 @@
             --radius-md: 12px;
             --radius-lg: 16px;
             --radius-xl: 24px;
-            --radius-2xl: 32px;
             --radius-full: 9999px;
             --font: 'Inter', -apple-system, system-ui, sans-serif;
             --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -66,9 +61,7 @@
             line-height: 1.6;
         }
 
-        /* ═══════════════════════════════════════════════
-           Dot Canvas (behind everything)
-           ═══════════════════════════════════════════════ */
+        /* ── Dot canvas ───────────────────────────── */
         #dot-canvas {
             position: fixed;
             inset: 0;
@@ -76,9 +69,7 @@
             pointer-events: none;
         }
 
-        /* ═══════════════════════════════════════════════
-           Layout
-           ═══════════════════════════════════════════════ */
+        /* ── Layout ───────────────────────────────── */
         .page {
             position: relative;
             z-index: 1;
@@ -94,9 +85,7 @@
             padding: 0 24px;
         }
 
-        /* ═══════════════════════════════════════════════
-           Header
-           ═══════════════════════════════════════════════ */
+        /* ── Header ───────────────────────────────── */
         .header {
             padding: 24px 0;
             animation: fadeDown 0.7s var(--transition) both;
@@ -154,9 +143,7 @@
             letter-spacing: 0.04em;
         }
 
-        /* ═══════════════════════════════════════════════
-           Hero
-           ═══════════════════════════════════════════════ */
+        /* ── Hero ─────────────────────────────────── */
         .hero {
             flex: 1;
             display: flex;
@@ -170,24 +157,25 @@
             max-width: 640px;
         }
 
-        /* Coming soon pill */
+        /* Coming soon — bigger, above everything */
         .hero-pill {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            gap: 10px;
+            padding: 10px 26px;
+            font-size: 0.95rem;
+            font-weight: 600;
             color: var(--accent);
             background: var(--accent-light);
             border-radius: var(--radius-full);
-            margin-bottom: 32px;
-            animation: fadeUp 0.7s 0.15s var(--transition) both;
+            margin-bottom: 36px;
+            letter-spacing: 0.01em;
+            animation: fadeUp 0.7s 0.1s var(--transition) both;
         }
 
         .pill-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: var(--accent);
             animation: pulseDot 2s ease-in-out infinite;
@@ -214,7 +202,7 @@
             letter-spacing: -0.03em;
             margin-bottom: 20px;
             color: var(--text);
-            animation: fadeUp 0.7s 0.25s var(--transition) both;
+            animation: fadeUp 0.7s 0.2s var(--transition) both;
         }
 
         .hero h1 .accent {
@@ -228,17 +216,15 @@
             margin: 0 auto 48px;
             font-weight: 400;
             line-height: 1.7;
-            animation: fadeUp 0.7s 0.35s var(--transition) both;
+            animation: fadeUp 0.7s 0.3s var(--transition) both;
         }
 
-        /* ═══════════════════════════════════════════════
-           Feature Cards
-           ═══════════════════════════════════════════════ */
+        /* ── Feature Cards ────────────────────────── */
         .features {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 14px;
-            animation: fadeUp 0.7s 0.5s var(--transition) both;
+            animation: fadeUp 0.7s 0.45s var(--transition) both;
         }
 
         .feature-card {
@@ -308,23 +294,19 @@
             line-height: 1.6;
         }
 
-        /* ═══════════════════════════════════════════════
-           Divider
-           ═══════════════════════════════════════════════ */
+        /* ── Divider ──────────────────────────────── */
         .divider {
             width: 80px;
             height: 1px;
             margin: 56px auto;
             background: var(--border-hover);
-            animation: fadeUp 0.7s 0.6s var(--transition) both;
+            animation: fadeUp 0.7s 0.55s var(--transition) both;
         }
 
-        /* ═══════════════════════════════════════════════
-           Footer
-           ═══════════════════════════════════════════════ */
+        /* ── Footer ───────────────────────────────── */
         .footer {
             padding: 24px 0 40px;
-            animation: fadeUp 0.7s 0.7s var(--transition) both;
+            animation: fadeUp 0.7s 0.6s var(--transition) both;
         }
 
         .footer .container {
@@ -377,9 +359,7 @@
             letter-spacing: 0.02em;
         }
 
-        /* ═══════════════════════════════════════════════
-           Animations
-           ═══════════════════════════════════════════════ */
+        /* ── Animations ───────────────────────────── */
         @keyframes fadeUp {
             from {
                 opacity: 0;
@@ -404,9 +384,7 @@
             }
         }
 
-        /* ═══════════════════════════════════════════════
-           Responsive
-           ═══════════════════════════════════════════════ */
+        /* ── Responsive ───────────────────────────── */
         @media (max-width: 768px) {
             .features {
                 grid-template-columns: 1fr;
@@ -452,12 +430,9 @@
 </head>
 
 <body>
-    <!-- Dot canvas -->
     <canvas id="dot-canvas"></canvas>
 
-    <!-- Page content -->
     <div class="page">
-        <!-- Header -->
         <header class="header">
             <div class="container">
                 <a href="/" class="logo">
@@ -474,7 +449,6 @@
             </div>
         </header>
 
-        <!-- Hero -->
         <main class="hero">
             <div class="container">
                 <div class="hero-content">
@@ -483,10 +457,7 @@
                         Скоро запуск
                     </div>
 
-                    <h1>
-                        Ваши продажи.<br>
-                        <span class="accent">Умный анализ.</span>
-                    </h1>
+                    <h1>Ваши продажи.<br><span class="accent">Умный анализ.</span></h1>
 
                     <p class="hero-sub">
                         Загрузите данные — получите готовую аналитику
@@ -494,20 +465,17 @@
                         Без сложных настроек.
                     </p>
 
-                    <!-- Feature Cards — numbered, no icons -->
                     <div class="features">
                         <div class="feature-card">
                             <div class="feature-num">1</div>
                             <h3>Аналитика</h3>
                             <p>Мгновенный анализ продаж в диалоге с AI-ассистентом</p>
                         </div>
-
                         <div class="feature-card">
                             <div class="feature-num">2</div>
                             <h3>Прогнозы</h3>
                             <p>Тренды и рекомендации на основе ваших данных</p>
                         </div>
-
                         <div class="feature-card">
                             <div class="feature-num">3</div>
                             <h3>Рост</h3>
@@ -518,10 +486,8 @@
             </div>
         </main>
 
-        <!-- Divider -->
         <div class="divider"></div>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-contacts">
@@ -562,136 +528,136 @@
 
             let W, H, dpr;
             let mouseX = -9999, mouseY = -9999;
-            let mouseActive = false;
-            let lastMoveTime = 0;
-            const dots = [];
             const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
 
-            // ── Config ──────────────────────────────────
-            const DOT_COUNT = isMobile ? 60 : 120;
-            const DOT_RADIUS = 2.2;
-            const DOT_COLOR_R = 0;
-            const DOT_COLOR_G = 122;
-            const DOT_COLOR_B = 255;
-            const ATTRACT_RADIUS = isMobile ? 0 : 280;     // px — mouse influence zone
-            const ATTRACT_STRENGTH = 0.025;                  // how fast dots drift toward cursor
-            const DRIFT_SPEED = 0.3;                         // passive drift speed
-            const FADE_IN_RADIUS = isMobile ? 9999 : 400;   // dots fade in near mouse on desktop
-            const MOBILE_FADE_DISTANCE = 9999;
+            // ── Config ─────────────────────────────────
+            const GRID_SPACING = isMobile ? 28 : 24;   // distance between dots
+            const BASE_RADIUS = 1;                       // resting dot size (nearly invisible)
+            const BASE_ALPHA = 0.04;                     // resting opacity (barely visible)
+            const MAX_RADIUS = isMobile ? 4.5 : 5.5;    // max inflated size
+            const MAX_ALPHA = 0.45;                      // max opacity when activated
+            const INFLUENCE = isMobile ? 120 : 180;      // cursor influence radius in px
+            const EASE = 0.08;                            // animation ease factor
+            const DOT_COLOR = '0, 122, 255';             // accent blue (RGB)
+
+            let dots = [];
+
+            // Mobile: simulated pointer that wanders
+            let simX = 0, simY = 0, simVX = 0, simVY = 0;
+            let simTarget = { x: 0, y: 0 };
+            let touchActive = false;
 
             function resize() {
                 dpr = Math.min(window.devicePixelRatio || 1, 2);
                 W = window.innerWidth;
-                H = window.innerHeight;
+                H = document.documentElement.scrollHeight;
                 canvas.width = W * dpr;
                 canvas.height = H * dpr;
                 canvas.style.width = W + 'px';
                 canvas.style.height = H + 'px';
                 ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                buildGrid();
             }
 
-            function createDot() {
-                return {
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    vx: (Math.random() - 0.5) * DRIFT_SPEED,
-                    vy: (Math.random() - 0.5) * DRIFT_SPEED,
-                    baseAlpha: 0.12 + Math.random() * 0.22,
-                    alpha: 0,
-                    size: DOT_RADIUS + Math.random() * 1.2,
-                };
-            }
+            function buildGrid() {
+                dots = [];
+                const cols = Math.ceil(W / GRID_SPACING) + 1;
+                const rows = Math.ceil(H / GRID_SPACING) + 1;
+                const offsetX = (W - (cols - 1) * GRID_SPACING) / 2;
+                const offsetY = (H - (rows - 1) * GRID_SPACING) / 2;
 
-            function init() {
-                resize();
-                dots.length = 0;
-                for (let i = 0; i < DOT_COUNT; i++) {
-                    dots.push(createDot());
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        dots.push({
+                            x: offsetX + c * GRID_SPACING,
+                            y: offsetY + r * GRID_SPACING,
+                            currentR: BASE_RADIUS,
+                            currentA: BASE_ALPHA,
+                        });
+                    }
                 }
             }
 
+            function pickNewSimTarget() {
+                simTarget.x = 80 + Math.random() * (W - 160);
+                simTarget.y = 80 + Math.random() * (H - 160);
+            }
+
+            function updateSimPointer() {
+                if (touchActive) return; // touch overrides
+
+                // Steer toward target
+                const dx = simTarget.x - simX;
+                const dy = simTarget.y - simY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 60) pickNewSimTarget();
+
+                simVX += (dx / dist) * 0.15;
+                simVY += (dy / dist) * 0.15;
+
+                // Damping
+                simVX *= 0.97;
+                simVY *= 0.97;
+
+                // Clamp speed
+                const speed = Math.sqrt(simVX * simVX + simVY * simVY);
+                const maxSpeed = 2.5;
+                if (speed > maxSpeed) {
+                    simVX = (simVX / speed) * maxSpeed;
+                    simVY = (simVY / speed) * maxSpeed;
+                }
+
+                simX += simVX;
+                simY += simVY;
+
+                mouseX = simX;
+                mouseY = simY;
+            }
+
             function update() {
-                const now = performance.now();
-                // On desktop, dots fade out after 4s of no mouse movement
-                const mouseRecent = (now - lastMoveTime) < 4000;
+                if (isMobile) updateSimPointer();
+
+                const scrollY = window.scrollY;
 
                 for (const d of dots) {
-                    if (!isMobile && mouseActive && mouseRecent) {
-                        // ── Desktop: attract toward mouse ──
-                        const dx = mouseX - d.x;
-                        const dy = mouseY - d.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
+                    const screenY = d.y - scrollY;
+                    const dx = mouseX - d.x;
+                    const dy = mouseY - screenY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
 
-                        if (dist < ATTRACT_RADIUS) {
-                            d.vx += (dx / dist) * ATTRACT_STRENGTH * (1 - dist / ATTRACT_RADIUS);
-                            d.vy += (dy / dist) * ATTRACT_STRENGTH * (1 - dist / ATTRACT_RADIUS);
-                        }
+                    // Influence factor: 0 (far) → 1 (at cursor)
+                    const t = Math.max(0, 1 - dist / INFLUENCE);
+                    // Smooth cubic falloff for organic feel
+                    const factor = t * t * (3 - 2 * t); // smoothstep
 
-                        // Alpha based on distance to mouse  
-                        const fadeDist = FADE_IN_RADIUS;
-                        const proximity = Math.max(0, 1 - dist / fadeDist);
-                        const targetAlpha = d.baseAlpha * (0.15 + proximity * 0.85);
-                        d.alpha += (targetAlpha - d.alpha) * 0.06;
-                    } else if (isMobile) {
-                        // ── Mobile: always visible, random drift ──
-                        d.alpha += (d.baseAlpha * 0.7 - d.alpha) * 0.03;
-                    } else {
-                        // Desktop, no mouse — fade out
-                        d.alpha += (0 - d.alpha) * 0.02;
-                    }
+                    const targetR = BASE_RADIUS + (MAX_RADIUS - BASE_RADIUS) * factor;
+                    const targetA = BASE_ALPHA + (MAX_ALPHA - BASE_ALPHA) * factor;
 
-                    // Friction
-                    d.vx *= 0.995;
-                    d.vy *= 0.995;
-
-                    // Apply velocity
-                    d.x += d.vx;
-                    d.y += d.vy;
-
-                    // Mobile: gentle random steering
-                    if (isMobile && Math.random() < 0.01) {
-                        d.vx += (Math.random() - 0.5) * 0.15;
-                        d.vy += (Math.random() - 0.5) * 0.15;
-                    }
-
-                    // Wrap around edges
-                    if (d.x < -20) d.x = W + 20;
-                    if (d.x > W + 20) d.x = -20;
-                    if (d.y < -20) d.y = H + 20;
-                    if (d.y > H + 20) d.y = -20;
+                    // Ease toward target
+                    d.currentR += (targetR - d.currentR) * EASE;
+                    d.currentA += (targetA - d.currentA) * EASE;
                 }
             }
 
             function draw() {
                 ctx.clearRect(0, 0, W, H);
 
-                for (const d of dots) {
-                    if (d.alpha < 0.005) continue;
-                    ctx.beginPath();
-                    ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(${DOT_COLOR_R}, ${DOT_COLOR_G}, ${DOT_COLOR_B}, ${d.alpha})`;
-                    ctx.fill();
-                }
+                const scrollY = window.scrollY;
+                // Only draw dots visible on screen (perf optimization)
+                const viewTop = scrollY - 20;
+                const viewBottom = scrollY + window.innerHeight + 20;
 
-                // Draw faint lines between close dots near cursor (desktop only)
-                if (!isMobile && mouseActive) {
-                    for (let i = 0; i < dots.length; i++) {
-                        for (let j = i + 1; j < dots.length; j++) {
-                            const a = dots[i], b = dots[j];
-                            const dx = a.x - b.x, dy = a.y - b.y;
-                            const dist = Math.sqrt(dx * dx + dy * dy);
-                            if (dist < 100) {
-                                const lineAlpha = Math.min(a.alpha, b.alpha) * (1 - dist / 100) * 0.5;
-                                if (lineAlpha < 0.005) continue;
-                                ctx.beginPath();
-                                ctx.moveTo(a.x, a.y);
-                                ctx.lineTo(b.x, b.y);
-                                ctx.strokeStyle = `rgba(${DOT_COLOR_R}, ${DOT_COLOR_G}, ${DOT_COLOR_B}, ${lineAlpha})`;
-                                ctx.lineWidth = 0.8;
-                                ctx.stroke();
-                            }
-                        }
-                    }
+                for (const d of dots) {
+                    if (d.y < viewTop || d.y > viewBottom) continue;
+                    if (d.currentA < 0.01) continue;
+
+                    const screenY = d.y - scrollY;
+
+                    ctx.beginPath();
+                    ctx.arc(d.x, screenY, d.currentR, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${DOT_COLOR}, ${d.currentA})`;
+                    ctx.fill();
                 }
             }
 
@@ -702,36 +668,51 @@
             }
 
             // ── Events ─────────────────────────────────
-            window.addEventListener('resize', resize);
+            window.addEventListener('resize', () => {
+                resize();
+            });
+
+            window.addEventListener('scroll', () => {
+                // Canvas stays fixed, but dots are in page-space
+                // We just need to recalculate during draw
+            }, { passive: true });
 
             if (!isMobile) {
                 document.addEventListener('mousemove', (e) => {
                     mouseX = e.clientX;
                     mouseY = e.clientY;
-                    mouseActive = true;
-                    lastMoveTime = performance.now();
-                });
-
-                document.addEventListener('mouseleave', () => {
-                    mouseActive = false;
                 });
             } else {
-                // Mobile: touch movements attract nearby dots briefly
+                // Touch overrides the simulated pointer temporarily
+                document.addEventListener('touchstart', (e) => {
+                    touchActive = true;
+                    const t = e.touches[0];
+                    mouseX = t.clientX;
+                    mouseY = t.clientY;
+                }, { passive: true });
+
                 document.addEventListener('touchmove', (e) => {
                     const t = e.touches[0];
                     mouseX = t.clientX;
                     mouseY = t.clientY;
-                    mouseActive = true;
-                    lastMoveTime = performance.now();
                 }, { passive: true });
 
                 document.addEventListener('touchend', () => {
-                    mouseActive = false;
+                    touchActive = false;
+                    // Resume simulated pointer from current position
+                    simX = mouseX;
+                    simY = mouseY;
+                    pickNewSimTarget();
                 });
             }
 
-            // ── Start ──────────────────────────────────
-            init();
+            // ── Init ───────────────────────────────────
+            resize();
+            if (isMobile) {
+                simX = W / 2;
+                simY = H / 3;
+                pickNewSimTarget();
+            }
             loop();
         })();
     </script>
