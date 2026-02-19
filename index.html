@@ -52,15 +52,40 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ── Canvas ────────────────────────────────── */
-        #bg-canvas {
+        /* ── Floating Particles ────────────────────── */
+        .particles {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: 0;
             pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-120vh) rotate(720deg);
+            }
         }
 
         /* ── General ───────────────────────────────── */
@@ -551,7 +576,7 @@
 </head>
 
 <body>
-    <canvas id="bg-canvas"></canvas>
+    <div class="particles" id="particles"></div>
 
     <div class="page">
         <!-- ═══ HERO (full viewport) ═══ -->
@@ -724,149 +749,26 @@
             document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
             // ═══════════════════════════════════════════════
-            // 3. PARTICLE NETWORK (your code + white bg fix)
+            // 3. FLOATING PARTICLES (Antigravity-style)
             // ═══════════════════════════════════════════════
-            const canvas = document.getElementById('bg-canvas');
-            const ctx = canvas.getContext('2d');
+            const particleContainer = document.getElementById('particles');
+            const colors = ['#4285f4', '#34a853', '#fbbc04', '#ea4335', '#8ab4f8'];
 
-            let particles = [];
-            const mouse = { x: null, y: null, radius: 150 };
-
-            // Accent color for dots & lines on white bg
-            const DR = 0, DG = 122, DB = 255;  // #007AFF
-
-            window.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-
-            window.addEventListener('mouseleave', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-
-            // Touch support
-            document.addEventListener('touchstart', (e) => {
-                mouse.x = e.touches[0].clientX;
-                mouse.y = e.touches[0].clientY;
-            }, { passive: true });
-
-            document.addEventListener('touchmove', (e) => {
-                mouse.x = e.touches[0].clientX;
-                mouse.y = e.touches[0].clientY;
-            }, { passive: true });
-
-            document.addEventListener('touchend', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+            for (let i = 0; i < 45; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = 1 + Math.random() * 2.5;
+                p.style.cssText = `
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    animation-duration: ${6 + Math.random() * 10}s;
+                    animation-delay: ${Math.random() * 8}s;
+                `;
+                particleContainer.appendChild(p);
             }
-            window.addEventListener('resize', () => { resize(); init(); });
-            resize();
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 1.8 + 0.8;
-                    this.density = (Math.random() * 30) + 1;
-                    this.speedX = (Math.random() - 0.5) * 0.6;
-                    this.speedY = (Math.random() - 0.5) * 0.6;
-                }
-
-                draw() {
-                    ctx.fillStyle = `rgba(${DR}, ${DG}, ${DB}, 0.4)`;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-
-                    if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-                    if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-
-                    // Mouse repulsion
-                    if (mouse.x != null && mouse.y != null) {
-                        let dx = mouse.x - this.x;
-                        let dy = mouse.y - this.y;
-                        let dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < mouse.radius) {
-                            const fx = dx / dist;
-                            const fy = dy / dist;
-                            const force = (mouse.radius - dist) / mouse.radius;
-                            this.x -= fx * force * this.density;
-                            this.y -= fy * force * this.density;
-                        }
-                    }
-                }
-            }
-
-            function init() {
-                particles = [];
-                const count = Math.min((canvas.width * canvas.height) / 8000, 200);
-                for (let i = 0; i < count; i++) {
-                    particles.push(new Particle());
-                }
-            }
-
-            function connect() {
-                const maxDist = 140;
-                for (let a = 0; a < particles.length; a++) {
-                    for (let b = a + 1; b < particles.length; b++) {
-                        const dx = particles[a].x - particles[b].x;
-                        const dy = particles[a].y - particles[b].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < maxDist) {
-                            const opacity = (1 - dist / maxDist) * 0.12;
-                            ctx.strokeStyle = `rgba(${DR}, ${DG}, ${DB}, ${opacity})`;
-                            ctx.lineWidth = 0.8;
-                            ctx.beginPath();
-                            ctx.moveTo(particles[a].x, particles[a].y);
-                            ctx.lineTo(particles[b].x, particles[b].y);
-                            ctx.stroke();
-                        }
-                    }
-
-                    // Mouse connections
-                    if (mouse.x != null && mouse.y != null) {
-                        const dx = particles[a].x - mouse.x;
-                        const dy = particles[a].y - mouse.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < maxDist) {
-                            const opacity = (1 - dist / maxDist) * 0.18;
-                            ctx.strokeStyle = `rgba(${DR}, ${DG}, ${DB}, ${opacity})`;
-                            ctx.lineWidth = 0.8;
-                            ctx.beginPath();
-                            ctx.moveTo(mouse.x, mouse.y);
-                            ctx.lineTo(particles[a].x, particles[a].y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (const p of particles) {
-                    p.update();
-                    p.draw();
-                }
-                connect();
-                requestAnimationFrame(animate);
-            }
-
-            init();
-            animate();
         })();
     </script>
 </body>
