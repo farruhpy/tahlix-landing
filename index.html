@@ -721,7 +721,7 @@
             document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
             // ═══════════════════════════════════════════════
-            // 3. MAGNETIC PARTICLES (iron filings effect)
+            // 3. RISING PARTICLES + GENTLE REPULSION
             // ═══════════════════════════════════════════════
             const canvas = document.getElementById('dot-canvas');
             const ctx = canvas.getContext('2d');
@@ -731,11 +731,9 @@
             // Antigravity color palette
             const COLORS = ['#4285f4', '#34a853', '#fbbc04', '#ea4335', '#8ab4f8'];
             const PARTICLE_COUNT = 55;
-            const MAGNET_RADIUS = 220;
-            const MAGNET_STRENGTH = 0.06;
-            const FRICTION = 0.94;
-            const DRIFT_SPEED = 0.3;
-            const RETURN_SPRING = 0.005;
+            const PUSH_RADIUS = 160;       // how close mouse pushes
+            const PUSH_STRENGTH = 3;       // gentle push force
+            const RECOVERY = 0.03;         // how fast dots return to trajectory
 
             let dots = [];
 
@@ -753,23 +751,31 @@
             function initDots() {
                 dots = [];
                 for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    const baseX = Math.random() * W;
+                    const baseY = Math.random() * H;
+                    // Each dot rises upward at its own speed
+                    const riseSpeed = 0.15 + Math.random() * 0.4;  // slow rise
+                    const wobbleAmp = 0.3 + Math.random() * 0.5;   // gentle horizontal sway
+
                     dots.push({
-                        // Home position (where it drifts around)
-                        homeX: Math.random() * W,
-                        homeY: Math.random() * H,
-                        // Current position
-                        x: Math.random() * W,
-                        y: Math.random() * H,
-                        // Velocity
-                        vx: (Math.random() - 0.5) * DRIFT_SPEED,
-                        vy: (Math.random() - 0.5) * DRIFT_SPEED,
-                        // Appearance
-                        radius: 1.5 + Math.random() * 2.5,
-                        color: COLORS[Math.floor(Math.random() * COLORS.length)],
-                        alpha: 0.35 + Math.random() * 0.35,
-                        // Drift phase for organic movement
+                        // Base trajectory position (rises upward)
+                        baseX: baseX,
+                        baseY: baseY,
+                        // Offset from trajectory (applied by mouse push)
+                        offsetX: 0,
+                        offsetY: 0,
+                        // Offset velocity (for smooth push/recovery)
+                        ovx: 0,
+                        ovy: 0,
+                        // Rise speed & wobble
+                        riseSpeed: riseSpeed,
+                        wobbleAmp: wobbleAmp,
                         phase: Math.random() * Math.PI * 2,
-                        speed: 0.2 + Math.random() * 0.4,
+                        wobbleSpeed: 0.3 + Math.random() * 0.5,
+                        // Appearance
+                        radius: 1.8 + Math.random() * 2.2,
+                        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                        alpha: 0.4 + Math.random() * 0.3,
                     });
                 }
             }
@@ -779,64 +785,75 @@
                 const time = performance.now() * 0.001;
 
                 for (const d of dots) {
-                    // 1. Ambient gentle drift (sine wave)
-                    const driftX = Math.sin(time * d.speed + d.phase) * 0.15;
-                    const driftY = Math.cos(time * d.speed * 0.7 + d.phase) * 0.15;
+                    // 1. Move base position upward (continuous rise)
+                    d.baseY -= d.riseSpeed;
 
-                    // 2. Magnetic attraction toward mouse
-                    if (mouse.active) {
-                        const dx = mouse.x - d.x;
-                        const dy = mouse.y - d.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < MAGNET_RADIUS && dist > 0) {
-                            // Stronger pull the closer you are (inverse square feel)
-                            const t = 1 - dist / MAGNET_RADIUS;
-                            const force = t * t * MAGNET_STRENGTH;
-                            d.vx += (dx / dist) * force * 60;
-                            d.vy += (dy / dist) * force * 60;
-                        }
-                    } else {
-                        // Gently return toward home position
-                        d.vx += (d.homeX - d.x) * RETURN_SPRING;
-                        d.vy += (d.homeY - d.y) * RETURN_SPRING;
+                    // Wrap: when a dot goes above screen, reappear at bottom
+                    if (d.baseY < -30) {
+                        d.baseY = H + 30;
+                        d.baseX = Math.random() * W;
+                        d.offsetX = 0;
+                        d.offsetY = 0;
+                        d.ovx = 0;
+                        d.ovy = 0;
                     }
 
-                    // 3. Apply drift
-                    d.vx += driftX;
-                    d.vy += driftY;
+                    // 2. Horizontal wobble on the trajectory
+                    const wobbleX = Math.sin(time * d.wobbleSpeed + d.phase) * d.wobbleAmp;
 
-                    // 4. Friction
-                    d.vx *= FRICTION;
-                    d.vy *= FRICTION;
+                    // 3. The "ideal" position on trajectory
+                    const trajX = d.baseX + wobbleX;
+                    const trajY = d.baseY;
 
-                    // 5. Update position
-                    d.x += d.vx;
-                    d.y += d.vy;
+                    // 4. Actual rendered position = trajectory + offset
+                    const drawX = trajX + d.offsetX;
+                    const drawY = trajY + d.offsetY;
 
-                    // 6. Soft boundary wrapping
-                    if (d.x < -20) d.x = W + 20;
-                    if (d.x > W + 20) d.x = -20;
-                    if (d.y < -20) d.y = H + 20;
-                    if (d.y > H + 20) d.y = -20;
+                    // 5. Mouse repulsion — push dots AWAY from pointer
+                    if (mouse.active) {
+                        const dx = drawX - mouse.x;  // vector FROM mouse TO dot
+                        const dy = drawY - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    // 7. Draw
-                    // Glow when near mouse
+                        if (dist < PUSH_RADIUS && dist > 1) {
+                            const t = 1 - dist / PUSH_RADIUS;
+                            // Quadratic falloff — stronger when closer
+                            const force = t * t * PUSH_STRENGTH;
+                            d.ovx += (dx / dist) * force;
+                            d.ovy += (dy / dist) * force;
+                        }
+                    }
+
+                    // 6. Spring recovery — offset returns to 0 (back to trajectory)
+                    d.ovx += -d.offsetX * RECOVERY;
+                    d.ovy += -d.offsetY * RECOVERY;
+
+                    // 7. Damping
+                    d.ovx *= 0.92;
+                    d.ovy *= 0.92;
+
+                    // 8. Update offset
+                    d.offsetX += d.ovx;
+                    d.offsetY += d.ovy;
+
+                    // 9. Draw dot
                     let drawAlpha = d.alpha;
                     let drawRadius = d.radius;
+
+                    // Slight brightening near mouse
                     if (mouse.active) {
-                        const dx = mouse.x - d.x;
-                        const dy = mouse.y - d.y;
+                        const dx = drawX - mouse.x;
+                        const dy = drawY - mouse.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < MAGNET_RADIUS) {
-                            const proximity = 1 - dist / MAGNET_RADIUS;
-                            drawAlpha = Math.min(1, d.alpha + proximity * 0.5);
-                            drawRadius = d.radius + proximity * 2;
+                        if (dist < PUSH_RADIUS) {
+                            const prox = 1 - dist / PUSH_RADIUS;
+                            drawAlpha = Math.min(0.9, d.alpha + prox * 0.3);
+                            drawRadius = d.radius + prox * 1.2;
                         }
                     }
 
                     ctx.beginPath();
-                    ctx.arc(d.x, d.y, drawRadius, 0, Math.PI * 2);
+                    ctx.arc(drawX, drawY, drawRadius, 0, Math.PI * 2);
                     ctx.fillStyle = d.color;
                     ctx.globalAlpha = drawAlpha;
                     ctx.fill();
@@ -857,8 +874,6 @@
 
             document.addEventListener('mouseleave', () => {
                 mouse.active = false;
-                mouse.x = -9999;
-                mouse.y = -9999;
             });
 
             document.addEventListener('touchstart', (e) => {
@@ -874,8 +889,6 @@
 
             document.addEventListener('touchend', () => {
                 mouse.active = false;
-                mouse.x = -9999;
-                mouse.y = -9999;
             });
 
             resize();
