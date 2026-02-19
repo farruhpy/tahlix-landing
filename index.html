@@ -11,26 +11,23 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tahlix.uz">
     <link rel="canonical" href="https://tahlix.uz">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 
     <style>
         :root {
             --bg: #ffffff;
-            --text: #1d1d1f;
-            --text-secondary: #6e6e73;
-            --text-tertiary: #aeaeb2;
-            --accent: #007AFF;
-            --accent-light: rgba(0, 122, 255, 0.08);
-            --accent-glow: rgba(0, 122, 255, 0.25);
-            --border: rgba(0, 0, 0, 0.08);
-            --border-hover: rgba(0, 0, 0, 0.14);
-            --card-bg: #f8f9fb;
-            --dot-color: rgba(0, 122, 255, 0.45);
-            --line-color-r: 0;
-            --line-color-g: 122;
-            --line-color-b: 255;
+            --text: #1a1a1a;
+            --text-secondary: #555;
+            --text-tertiary: #999;
+            --accent: #2E8BF7;
+            --accent-light: rgba(46, 139, 247, 0.07);
+            --accent-glow: rgba(46, 139, 247, 0.2);
+            --border: rgba(0, 0, 0, 0.06);
+            --border-hover: rgba(0, 0, 0, 0.12);
+            --card-bg: #fafbfc;
         }
 
         * {
@@ -52,18 +49,14 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ── Canvas ────────────────────────────────── */
+        /* ── Canvas (fixed bg) ──────────────────────── */
         #bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* ── General ───────────────────────────────── */
         .page {
             position: relative;
             z-index: 1;
@@ -72,16 +65,16 @@
         .container {
             max-width: 960px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 28px;
         }
 
-        /* ═══════════════════════════════════════════════
-           HEADER (sticky top of hero)
-           ═══════════════════════════════════════════════ */
+        /* ═════════════════════════════════════════════
+           HEADER
+           ═════════════════════════════════════════════ */
         .header {
-            padding: 24px 0;
+            padding: 20px 0;
             opacity: 0;
-            animation: fadeDown 0.7s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeDown 0.7s 0.2s ease forwards;
         }
 
         .header .container {
@@ -93,52 +86,33 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0;
             text-decoration: none;
+            transition: opacity 0.2s;
         }
 
-        .logo-mark {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 14px var(--accent-glow);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        .logo:hover {
+            opacity: 0.8;
         }
 
-        .logo:hover .logo-mark {
-            transform: scale(1.06) rotate(-2deg);
-        }
-
-        .logo-mark svg {
-            width: 18px;
-            height: 18px;
-            color: white;
-        }
-
-        .logo-text {
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--text);
+        .logo-img {
+            height: 28px;
+            width: auto;
         }
 
         .header-badge {
             padding: 5px 14px;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 500;
             color: var(--text-tertiary);
             border: 1px solid var(--border);
             border-radius: 100px;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
         }
 
-        /* ═══════════════════════════════════════════════
-           SECTION 1: HERO (full viewport)
-           ═══════════════════════════════════════════════ */
+        /* ═════════════════════════════════════════════
+           HERO (full viewport, centered)
+           ═════════════════════════════════════════════ */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -153,52 +127,38 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 0 24px 80px;
+            padding: 0 28px 100px;
         }
 
-        /* Big heading */
-        .hero-title {
-            font-size: clamp(3.2rem, 9vw, 6rem);
-            font-weight: 700;
-            letter-spacing: -0.04em;
-            color: var(--text);
-            margin-bottom: 24px;
-            line-height: 1;
-            overflow: hidden;
-        }
-
-        .hero-title .letter {
-            display: inline-block;
+        /* Hero logo / title  */
+        .hero-logo {
+            margin-bottom: 32px;
             opacity: 0;
-            transform: translateY(100%);
-            animation: letterReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform: scale(0.85) translateY(10px);
+            animation: logoReveal 0.8s 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .hero-title .letter-space {
-            display: inline-block;
-            width: 0.25em;
+        .hero-logo img {
+            height: clamp(56px, 8vw, 80px);
+            width: auto;
         }
 
-        .hero-title .letter-dot {
-            color: var(--accent);
-        }
-
-        @keyframes letterReveal {
+        @keyframes logoReveal {
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: scale(1) translateY(0);
             }
         }
 
         /* Typing text */
         .hero-typing {
-            font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+            font-size: clamp(1.15rem, 2.6vw, 1.5rem);
             color: var(--text-secondary);
-            max-width: 580px;
+            max-width: 600px;
             line-height: 1.75;
             font-weight: 400;
-            min-height: 2.5em;
-            margin-bottom: 40px;
+            min-height: 2em;
+            margin-bottom: 42px;
         }
 
         .hero-typing .char {
@@ -211,16 +171,17 @@
             opacity: 1;
         }
 
-        /* Coming soon pill */
+        /* Pill */
         .hero-pill {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 28px;
-            font-size: 1rem;
+            padding: 12px 30px;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--accent);
             background: var(--accent-light);
+            border: 1px solid rgba(46, 139, 247, 0.12);
             border-radius: 100px;
             letter-spacing: 0.01em;
             opacity: 0;
@@ -248,15 +209,15 @@
             }
 
             50% {
-                opacity: 0.4;
-                transform: scale(0.7);
+                opacity: 0.35;
+                transform: scale(0.65);
             }
         }
 
         /* Scroll hint */
         .scroll-hint {
             position: absolute;
-            bottom: 24px;
+            bottom: 28px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -264,19 +225,20 @@
             align-items: center;
             gap: 4px;
             opacity: 0;
-            animation: fadeUp 0.5s 4.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeUp 0.5s 5s ease forwards;
         }
 
         .scroll-hint span {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: var(--text-tertiary);
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
+            font-weight: 500;
         }
 
         .scroll-arrow {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             color: var(--text-tertiary);
             animation: bounceDown 2s ease-in-out infinite;
         }
@@ -289,13 +251,13 @@
             }
 
             50% {
-                transform: translateY(5px);
+                transform: translateY(4px);
             }
         }
 
-        /* ═══════════════════════════════════════════════
-           SECTION 2: DETAILS (scrollable)
-           ═══════════════════════════════════════════════ */
+        /* ═════════════════════════════════════════════
+           DETAILS SECTION (scrollable)
+           ═════════════════════════════════════════════ */
         .details {
             padding: 100px 0 60px;
         }
@@ -323,7 +285,7 @@
             line-height: 1.7;
         }
 
-        /* Reveal on scroll */
+        /* Reveal */
         .reveal {
             opacity: 0;
             transform: translateY(24px);
@@ -335,7 +297,7 @@
             transform: translateY(0);
         }
 
-        /* ── Feature Cards ────────────────────────── */
+        /* Feature Cards */
         .features {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -353,26 +315,25 @@
             overflow: hidden;
         }
 
-        .feature-card::after {
+        .feature-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: var(--accent);
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), rgba(46, 139, 247, 0.4));
             opacity: 0;
             transition: opacity 0.3s ease;
-            border-radius: 20px 20px 0 0;
         }
 
         .feature-card:hover {
             border-color: var(--border-hover);
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.05);
         }
 
-        .feature-card:hover::after {
+        .feature-card:hover::before {
             opacity: 1;
         }
 
@@ -380,43 +341,43 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 100px;
             background: var(--accent);
             color: white;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             margin-bottom: 14px;
             transition: transform 0.3s ease;
         }
 
         .feature-card:hover .feature-num {
-            transform: scale(1.1);
+            transform: scale(1.12);
         }
 
         .feature-card h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             margin-bottom: 6px;
             letter-spacing: -0.01em;
         }
 
         .feature-card p {
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
             line-height: 1.6;
         }
 
-        /* ── Divider ──────────────────────────────── */
+        /* Divider */
         .divider {
-            width: 80px;
+            width: 60px;
             height: 1px;
             margin: 60px auto;
             background: var(--border-hover);
         }
 
-        /* ── Footer / Contacts ────────────────────── */
+        /* Footer */
         .footer {
             padding: 20px 0 48px;
         }
@@ -440,7 +401,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--text-secondary);
             text-decoration: none;
             padding: 10px 18px;
@@ -460,18 +421,18 @@
         }
 
         .contact-link svg {
-            width: 16px;
-            height: 16px;
+            width: 15px;
+            height: 15px;
             flex-shrink: 0;
         }
 
         .footer-copy {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: var(--text-tertiary);
             letter-spacing: 0.02em;
         }
 
-        /* ── Animations ───────────────────────────── */
+        /* ── Keyframes ─────────────────────────────── */
         @keyframes fadeUp {
             from {
                 opacity: 0;
@@ -496,7 +457,7 @@
             }
         }
 
-        /* ── Responsive ───────────────────────────── */
+        /* ── Responsive ────────────────────────────── */
         @media (max-width: 768px) {
             .features {
                 grid-template-columns: 1fr;
@@ -515,10 +476,6 @@
             .details {
                 padding: 60px 0 40px;
             }
-
-            .hero-title {
-                margin-bottom: 20px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -527,7 +484,7 @@
             }
 
             .header {
-                padding: 18px 0;
+                padding: 16px 0;
             }
 
             .header-badge {
@@ -539,12 +496,12 @@
             }
 
             .contact-link {
-                font-size: 0.78rem;
+                font-size: 0.76rem;
                 padding: 8px 14px;
             }
 
-            .hero-title {
-                margin-bottom: 16px;
+            .logo-img {
+                height: 22px;
             }
         }
     </style>
@@ -554,26 +511,21 @@
     <canvas id="bg-canvas"></canvas>
 
     <div class="page">
-        <!-- ═══ HERO (full viewport) ═══ -->
+        <!-- HERO -->
         <section class="hero">
             <header class="header">
                 <div class="container">
                     <a href="/" class="logo">
-                        <div class="logo-mark">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 3v18h18" />
-                                <path d="m19 9-5 5-4-4-3 3" />
-                            </svg>
-                        </div>
-                        <span class="logo-text">Tahlix</span>
+                        <img src="logo.png" alt="Tahlix" class="logo-img">
                     </a>
                     <span class="header-badge">tahlix.uz</span>
                 </div>
             </header>
 
             <div class="hero-center">
-                <h1 class="hero-title" id="hero-title"></h1>
+                <div class="hero-logo">
+                    <img src="logo.png" alt="Tahlix" id="hero-logo-img">
+                </div>
                 <p class="hero-typing" id="hero-typing"></p>
                 <div class="hero-pill" id="hero-pill">
                     <span class="pill-dot"></span>
@@ -590,7 +542,7 @@
             </div>
         </section>
 
-        <!-- ═══ DETAILS (scroll down) ═══ -->
+        <!-- DETAILS -->
         <section class="details">
             <div class="container">
                 <h1 class="section-title reveal">
@@ -662,30 +614,7 @@
     <script>
         (() => {
             // ═══════════════════════════════════════════════
-            // 0. TITLE LETTER REVEAL
-            // ═══════════════════════════════════════════════
-            const titleEl = document.getElementById('hero-title');
-            const titleText = 'Tahlix AI';
-            const titleDot = '.';
-
-            let titleHTML = '';
-            for (let i = 0; i < titleText.length; i++) {
-                const ch = titleText[i];
-                if (ch === ' ') {
-                    titleHTML += '<span class="letter-space"></span>';
-                } else {
-                    titleHTML += `<span class="letter" style="animation-delay:${0.3 + i * 0.07}s">${ch}</span>`;
-                }
-            }
-            // Accent dot at end
-            titleHTML += `<span class="letter letter-dot" style="animation-delay:${0.3 + titleText.length * 0.07}s">${titleDot}</span>`;
-            titleEl.innerHTML = titleHTML;
-
-            // Total title animation time
-            const titleDoneMs = (0.3 + (titleText.length + 1) * 0.07 + 0.6) * 1000;
-
-            // ═══════════════════════════════════════════════
-            // 1. TYPING ANIMATION (starts after title)
+            // 1. TYPING ANIMATION
             // ═══════════════════════════════════════════════
             const typingEl = document.getElementById('hero-typing');
             const pillEl = document.getElementById('hero-pill');
@@ -702,18 +631,19 @@
                 if (charIdx < chars.length) {
                     chars[charIdx].classList.add('visible');
                     charIdx++;
-                    setTimeout(typeNext, 26 + Math.random() * 20);
+                    setTimeout(typeNext, 24 + Math.random() * 18);
                 } else {
                     setTimeout(() => pillEl.classList.add('visible'), 400);
                 }
             }
 
-            setTimeout(typeNext, titleDoneMs);
+            // Start typing after logo reveals
+            setTimeout(typeNext, 1400);
 
             // ═══════════════════════════════════════════════
             // 2. SCROLL REVEAL
             // ═══════════════════════════════════════════════
-            const revealObserver = new IntersectionObserver((entries) => {
+            const obs = new IntersectionObserver((entries) => {
                 entries.forEach((e, i) => {
                     if (e.isIntersecting) {
                         setTimeout(() => e.target.classList.add('visible'), i * 80);
@@ -721,34 +651,198 @@
                 });
             }, { threshold: 0.12 });
 
-            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
             // ═══════════════════════════════════════════════
-            // 3. PARTICLE NETWORK (your code + white bg fix)
+            // 3. SEAWEED / WATER PLANT ANIMATION
+            //    Vertical strands anchored at bottom, swaying
+            //    like underwater plants. Mouse creates a wave
+            //    disturbance that ripples through the stalks.
             // ═══════════════════════════════════════════════
             const canvas = document.getElementById('bg-canvas');
             const ctx = canvas.getContext('2d');
 
-            let particles = [];
-            const mouse = { x: null, y: null, radius: 150 };
+            let W, H;
+            const mouse = { x: -9999, y: -9999, active: false };
+            let time = 0;
 
-            // Accent color for dots & lines on white bg
-            const DR = 0, DG = 122, DB = 255;  // #007AFF
+            // Strand config
+            const STRAND_SPACING = 28;       // px between strands
+            const SEGMENTS = 20;             // joints per strand
+            const SEGMENT_LEN = 18;          // px per segment
+            const BASE_SWAY = 0.35;          // ambient sway amplitude
+            const MOUSE_RADIUS = 200;        // wave influence radius
+            const MOUSE_STRENGTH = 1.8;      // wave push strength
+            const DAMPING = 0.92;            // how fast wave energy decays
+            const SPRING = 0.04;             // return-to-center spring
+            const STRAND_ALPHA = 0.08;       // very subtle
+            const DOT_RADIUS = 2;            // joint dot size
+            const ACCENT_R = 46, ACCENT_G = 139, ACCENT_B = 247;
 
-            window.addEventListener('mousemove', (e) => {
+            let strands = [];
+
+            function resize() {
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = W * (window.devicePixelRatio || 1);
+                canvas.height = H * (window.devicePixelRatio || 1);
+                canvas.style.width = W + 'px';
+                canvas.style.height = H + 'px';
+                ctx.setTransform(window.devicePixelRatio || 1, 0, 0, window.devicePixelRatio || 1, 0, 0);
+                initStrands();
+            }
+
+            function initStrands() {
+                strands = [];
+                const count = Math.ceil(W / STRAND_SPACING) + 1;
+                for (let i = 0; i < count; i++) {
+                    const x = i * STRAND_SPACING;
+                    const segments = [];
+                    // Random height variation
+                    const heightMult = 0.5 + Math.random() * 0.5;
+                    const phase = Math.random() * Math.PI * 2;
+                    const speed = 0.3 + Math.random() * 0.4;
+
+                    for (let j = 0; j < SEGMENTS; j++) {
+                        segments.push({
+                            offsetX: 0,    // current horizontal offset from straight
+                            velocity: 0,   // horizontal velocity
+                        });
+                    }
+
+                    strands.push({
+                        baseX: x,
+                        baseY: H,    // anchored at bottom
+                        segments,
+                        heightMult,
+                        phase,
+                        speed,
+                    });
+                }
+            }
+
+            function updateStrands() {
+                time += 0.016; // ~60fps timestep
+
+                for (const strand of strands) {
+                    for (let j = 0; j < strand.segments.length; j++) {
+                        const seg = strand.segments[j];
+                        const depth = (j + 1) / strand.segments.length; // 0 at base, 1 at tip
+
+                        // 1. Ambient ocean sway (sine wave, stronger at tip)
+                        const ambient = Math.sin(time * strand.speed + strand.phase + j * 0.3) * BASE_SWAY * depth;
+
+                        // 2. Mouse wave influence
+                        let mouseForce = 0;
+                        if (mouse.active) {
+                            // Calculate world position of this segment
+                            const segY = strand.baseY - (j + 1) * SEGMENT_LEN * strand.heightMult;
+                            const segX = strand.baseX + seg.offsetX;
+                            const dx = mouse.x - segX;
+                            const dy = mouse.y - segY;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist < MOUSE_RADIUS) {
+                                // Smoothstep falloff
+                                const t = 1 - dist / MOUSE_RADIUS;
+                                const smooth = t * t * (3 - 2 * t);
+                                // Push in direction away from mouse (horizontal only)
+                                const dir = dx > 0 ? -1 : 1;
+                                mouseForce = dir * smooth * MOUSE_STRENGTH * depth;
+                            }
+                        }
+
+                        // 3. Spring physics: pull back to center + apply forces
+                        seg.velocity += mouseForce;
+                        seg.velocity += (ambient - seg.offsetX) * SPRING;
+                        seg.velocity *= DAMPING;
+                        seg.offsetX += seg.velocity;
+                    }
+                }
+            }
+
+            function drawStrands() {
+                ctx.clearRect(0, 0, W, H);
+
+                for (const strand of strands) {
+                    // Build points for this strand
+                    const points = [{ x: strand.baseX, y: strand.baseY }];
+
+                    for (let j = 0; j < strand.segments.length; j++) {
+                        const seg = strand.segments[j];
+                        const y = strand.baseY - (j + 1) * SEGMENT_LEN * strand.heightMult;
+                        const x = strand.baseX + seg.offsetX;
+                        points.push({ x, y });
+                    }
+
+                    // Draw smooth curve through points
+                    if (points.length < 2) continue;
+
+                    // Gradient along strand height
+                    const tipY = points[points.length - 1].y;
+                    const gradient = ctx.createLinearGradient(0, strand.baseY, 0, tipY);
+                    gradient.addColorStop(0, `rgba(${ACCENT_R}, ${ACCENT_G}, ${ACCENT_B}, 0.02)`);
+                    gradient.addColorStop(0.5, `rgba(${ACCENT_R}, ${ACCENT_G}, ${ACCENT_B}, ${STRAND_ALPHA})`);
+                    gradient.addColorStop(1, `rgba(${ACCENT_R}, ${ACCENT_G}, ${ACCENT_B}, ${STRAND_ALPHA + 0.04})`);
+
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y);
+
+                    // Catmull-Rom → cubic bezier for smooth curves
+                    for (let i = 0; i < points.length - 1; i++) {
+                        const p0 = points[Math.max(0, i - 1)];
+                        const p1 = points[i];
+                        const p2 = points[Math.min(points.length - 1, i + 1)];
+                        const p3 = points[Math.min(points.length - 1, i + 2)];
+
+                        const cp1x = p1.x + (p2.x - p0.x) / 6;
+                        const cp1y = p1.y + (p2.y - p0.y) / 6;
+                        const cp2x = p2.x - (p3.x - p1.x) / 6;
+                        const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+                    }
+
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 1.5;
+                    ctx.lineCap = 'round';
+                    ctx.stroke();
+
+                    // Draw small dots at segment joints (very subtle)
+                    for (let j = 2; j < points.length; j += 2) {
+                        const p = points[j];
+                        const depth = j / points.length;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, DOT_RADIUS * (0.5 + depth * 0.5), 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(${ACCENT_R}, ${ACCENT_G}, ${ACCENT_B}, ${0.06 + depth * 0.08})`;
+                        ctx.fill();
+                    }
+                }
+            }
+
+            function loop() {
+                updateStrands();
+                drawStrands();
+                requestAnimationFrame(loop);
+            }
+
+            // Events
+            window.addEventListener('resize', resize);
+
+            document.addEventListener('mousemove', (e) => {
                 mouse.x = e.clientX;
                 mouse.y = e.clientY;
+                mouse.active = true;
             });
 
-            window.addEventListener('mouseleave', () => {
-                mouse.x = null;
-                mouse.y = null;
+            document.addEventListener('mouseleave', () => {
+                mouse.active = false;
             });
 
-            // Touch support
             document.addEventListener('touchstart', (e) => {
                 mouse.x = e.touches[0].clientX;
                 mouse.y = e.touches[0].clientY;
+                mouse.active = true;
             }, { passive: true });
 
             document.addEventListener('touchmove', (e) => {
@@ -757,116 +851,11 @@
             }, { passive: true });
 
             document.addEventListener('touchend', () => {
-                mouse.x = null;
-                mouse.y = null;
+                mouse.active = false;
             });
 
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', () => { resize(); init(); });
             resize();
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 1.8 + 0.8;
-                    this.density = (Math.random() * 30) + 1;
-                    this.speedX = (Math.random() - 0.5) * 0.6;
-                    this.speedY = (Math.random() - 0.5) * 0.6;
-                }
-
-                draw() {
-                    ctx.fillStyle = `rgba(${DR}, ${DG}, ${DB}, 0.4)`;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-
-                    if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-                    if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-
-                    // Mouse repulsion
-                    if (mouse.x != null && mouse.y != null) {
-                        let dx = mouse.x - this.x;
-                        let dy = mouse.y - this.y;
-                        let dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < mouse.radius) {
-                            const fx = dx / dist;
-                            const fy = dy / dist;
-                            const force = (mouse.radius - dist) / mouse.radius;
-                            this.x -= fx * force * this.density;
-                            this.y -= fy * force * this.density;
-                        }
-                    }
-                }
-            }
-
-            function init() {
-                particles = [];
-                const count = Math.min((canvas.width * canvas.height) / 8000, 200);
-                for (let i = 0; i < count; i++) {
-                    particles.push(new Particle());
-                }
-            }
-
-            function connect() {
-                const maxDist = 140;
-                for (let a = 0; a < particles.length; a++) {
-                    for (let b = a + 1; b < particles.length; b++) {
-                        const dx = particles[a].x - particles[b].x;
-                        const dy = particles[a].y - particles[b].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < maxDist) {
-                            const opacity = (1 - dist / maxDist) * 0.12;
-                            ctx.strokeStyle = `rgba(${DR}, ${DG}, ${DB}, ${opacity})`;
-                            ctx.lineWidth = 0.8;
-                            ctx.beginPath();
-                            ctx.moveTo(particles[a].x, particles[a].y);
-                            ctx.lineTo(particles[b].x, particles[b].y);
-                            ctx.stroke();
-                        }
-                    }
-
-                    // Mouse connections
-                    if (mouse.x != null && mouse.y != null) {
-                        const dx = particles[a].x - mouse.x;
-                        const dy = particles[a].y - mouse.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < maxDist) {
-                            const opacity = (1 - dist / maxDist) * 0.18;
-                            ctx.strokeStyle = `rgba(${DR}, ${DG}, ${DB}, ${opacity})`;
-                            ctx.lineWidth = 0.8;
-                            ctx.beginPath();
-                            ctx.moveTo(mouse.x, mouse.y);
-                            ctx.lineTo(particles[a].x, particles[a].y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (const p of particles) {
-                    p.update();
-                    p.draw();
-                }
-                connect();
-                requestAnimationFrame(animate);
-            }
-
-            init();
-            animate();
+            loop();
         })();
     </script>
 </body>
