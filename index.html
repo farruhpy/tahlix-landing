@@ -91,32 +91,14 @@
         }
 
         .logo {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
             text-decoration: none;
+            transition: opacity 0.2s;
         }
 
-        .logo-mark {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 14px var(--accent-glow);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .logo:hover .logo-mark {
-            transform: scale(1.06) rotate(-2deg);
-        }
-
-        .logo-mark svg {
-            width: 18px;
-            height: 18px;
-            color: white;
+        .logo:hover {
+            opacity: 0.7;
         }
 
         .logo-text {
@@ -124,6 +106,23 @@
             font-weight: 700;
             letter-spacing: -0.02em;
             color: var(--text);
+            display: inline-flex;
+            align-items: baseline;
+        }
+
+        /* The 'i' with triangle — shared between header and hero */
+        .tahlix-i {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tahlix-i .tri {
+            position: absolute;
+            top: -0.08em;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0.5em;
+            height: 0.38em;
         }
 
         .header-badge {
@@ -181,6 +180,13 @@
 
         .hero-title .letter-dot {
             color: var(--accent);
+        }
+
+        /* Triangle on hero 'i' */
+        .hero-title .tahlix-i .tri {
+            top: -0.05em;
+            width: 0.45em;
+            height: 0.35em;
         }
 
         @keyframes letterReveal {
@@ -559,14 +565,10 @@
             <header class="header">
                 <div class="container">
                     <a href="/" class="logo">
-                        <div class="logo-mark">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 3v18h18" />
-                                <path d="m19 9-5 5-4-4-3 3" />
-                            </svg>
-                        </div>
-                        <span class="logo-text">Tahlix</span>
+                        <span class="logo-text">Tahl<span class="tahlix-i">i<svg class="tri" viewBox="0 0 10 8"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 0L10 8H0L5 0Z" fill="#007AFF" />
+                                </svg></span>x</span>
                     </a>
                     <span class="header-badge">tahlix.uz</span>
                 </div>
@@ -667,12 +669,17 @@
             const titleEl = document.getElementById('hero-title');
             const titleText = 'Tahlix AI';
             const titleDot = '.';
+            const triSVG = '<svg class="tri" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 0L10 8H0L5 0Z" fill="#007AFF"/></svg>';
 
             let titleHTML = '';
+            let idx = 0;
             for (let i = 0; i < titleText.length; i++) {
                 const ch = titleText[i];
                 if (ch === ' ') {
                     titleHTML += '<span class="letter-space"></span>';
+                } else if (ch === 'i' && i === 4) {
+                    // The 'i' in 'Tahlix' — add blue triangle
+                    titleHTML += `<span class="letter tahlix-i" style="animation-delay:${0.3 + i * 0.07}s">i${triSVG}</span>`;
                 } else {
                     titleHTML += `<span class="letter" style="animation-delay:${0.3 + i * 0.07}s">${ch}</span>`;
                 }
