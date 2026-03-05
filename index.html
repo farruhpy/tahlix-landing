@@ -17,10 +17,11 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tahlix — AI-аналитика продаж</title>
-    <meta name="description" content="Tahlix — умная платформа аналитики продаж для бизнеса. Скоро запуск.">
-    <meta property="og:title" content="Tahlix — AI-аналитика продаж">
-    <meta property="og:description" content="Умная платформа аналитики продаж для вашего бизнеса.">
+    <title>Tahlix — AI бизнес-аналитика</title>
+    <meta name="description"
+        content="Tahlix — AI-платформа для анализа любых бизнес-данных. Продажи, финансы, HR, логистика — загрузите данные и получите инсайты.">
+    <meta property="og:title" content="Tahlix — AI бизнес-аналитика">
+    <meta property="og:description" content="AI-платформа для анализа любых бизнес-данных. Скоро запуск.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tahlix.uz">
     <link rel="canonical" href="https://tahlix.uz">
@@ -345,11 +346,49 @@
             transform: translateY(0);
         }
 
-        /* ── Feature Cards ────────────────────────── */
         .features {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 14px;
+        }
+
+        /* ── Industries Grid ────────────────────────── */
+        .industries {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .industry-item {
+            padding: 20px 16px;
+            border-radius: 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .industry-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        }
+
+        .industry-icon {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+
+        .industry-item h4 {
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .industry-item p {
+            font-size: 0.72rem;
+            color: var(--text-tertiary);
         }
 
         .feature-card {
@@ -513,6 +552,10 @@
                 gap: 10px;
             }
 
+            .industries {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .feature-card {
                 padding: 22px 20px;
                 border-radius: 16px;
@@ -604,7 +647,7 @@
         <section class="details">
             <div class="container">
                 <h1 class="section-title reveal">
-                    Ваши продажи.<br><span class="accent">Умный анализ.</span>
+                    Ваш бизнес.<br><span class="accent">Умный анализ.</span>
                 </h1>
                 <p class="section-sub reveal">
                     Загрузите данные — получите готовую аналитику
@@ -614,18 +657,66 @@
                 <div class="features">
                     <div class="feature-card reveal">
                         <div class="feature-num">1</div>
-                        <h3>Аналитика</h3>
-                        <p>Мгновенный анализ продаж в диалоге с AI-ассистентом</p>
+                        <h3>AI Аналитика</h3>
+                        <p>Задавайте вопросы на естественном языке — AI мгновенно анализирует данные</p>
                     </div>
                     <div class="feature-card reveal">
                         <div class="feature-num">2</div>
-                        <h3>Прогнозы</h3>
-                        <p>Тренды и рекомендации на основе ваших данных</p>
+                        <h3>Любые данные</h3>
+                        <p>Продажи, финансы, HR, логистика — работает с любым Excel/CSV файлом</p>
                     </div>
                     <div class="feature-card reveal">
                         <div class="feature-num">3</div>
-                        <h3>Рост</h3>
-                        <p>Находите скрытые возможности для роста бизнеса</p>
+                        <h3>Визуализация</h3>
+                        <p>Автоматические интерактивные графики и отчёты</p>
+                    </div>
+                </div>
+
+                <!-- Industries -->
+                <div class="divider"></div>
+                <h2 class="section-title reveal">Для <span class="accent">любого</span> бизнеса</h2>
+                <p class="section-sub reveal">Tahlix анализирует данные из любой отрасли</p>
+
+                <div class="industries reveal">
+                    <div class="industry-item">
+                        <div class="industry-icon">🛒</div>
+                        <h4>Розница</h4>
+                        <p>Продажи и ассортимент</p>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">🍽️</div>
+                        <h4>Рестораны</h4>
+                        <p>Меню и заказы</p>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">💰</div>
+                        <h4>Финансы</h4>
+                        <p>Доходы и расходы</p>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">👥</div>
+                        <h4>HR</h4>
+                        <p>Сотрудники и KPI</p>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">🚚</div>
+                        <h4>Логистика</h4>
+                        <p>Доставки и маршруты</p>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">🎓</div>
+                        <h4>Образование</h4>
+                        <p>Студенты и оценки</p>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">🏭</div>
+                        <h4>Производство</h4>
+                        <p>Продукция и затраты</p>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">📢</div>
+                        <h4>Маркетинг</h4>
+                        <p>Кампании и ROI</p>
                     </div>
                 </div>
 
@@ -662,7 +753,7 @@
                                 +998 90 720 16 46
                             </a>
                         </div>
-                        <p class="footer-copy">© 2026 Tahlix. Все права защищены.</p>
+                        <p class="footer-copy">© 2025 Tahlix. Barcha huquqlar himoyalangan.</p>
                     </div>
                 </footer>
             </div>
@@ -699,7 +790,7 @@
             // ═══════════════════════════════════════════════
             const typingEl = document.getElementById('hero-typing');
             const pillEl = document.getElementById('hero-pill');
-            const text = 'Умная платформа аналитики продаж для вашего бизнеса — с AI-ассистентом, графиками и рекомендациями.';
+            const text = 'AI-платформа для анализа любых бизнес-данных — продажи, финансы, HR, логистика и другое.';
 
             typingEl.innerHTML = text.split('').map(ch =>
                 ch === ' ' ? ' ' : `<span class="char">${ch}</span>`
