@@ -378,6 +378,20 @@
         .industry-icon {
             font-size: 1.6rem;
             margin-bottom: 8px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .industry-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke-width: 1.5;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .industry-item:hover .industry-icon svg {
+            transform: scale(1.1);
         }
 
         .industry-item h4 {
@@ -679,42 +693,42 @@
 
                 <div class="industries reveal">
                     <div class="industry-item">
-                        <div class="industry-icon">🛒</div>
+                        <div class="industry-icon"><i data-lucide="shopping-bag"></i></div>
                         <h4>Розница</h4>
                         <p>Продажи и ассортимент</p>
                     </div>
                     <div class="industry-item">
-                        <div class="industry-icon">🍽️</div>
+                        <div class="industry-icon"><i data-lucide="utensils"></i></div>
                         <h4>Рестораны</h4>
                         <p>Меню и заказы</p>
                     </div>
                     <div class="industry-item">
-                        <div class="industry-icon">💰</div>
+                        <div class="industry-icon"><i data-lucide="wallet"></i></div>
                         <h4>Финансы</h4>
                         <p>Доходы и расходы</p>
                     </div>
                     <div class="industry-item">
-                        <div class="industry-icon">👥</div>
+                        <div class="industry-icon"><i data-lucide="users"></i></div>
                         <h4>HR</h4>
                         <p>Сотрудники и KPI</p>
                     </div>
                     <div class="industry-item">
-                        <div class="industry-icon">🚚</div>
+                        <div class="industry-icon"><i data-lucide="truck"></i></div>
                         <h4>Логистика</h4>
                         <p>Доставки и маршруты</p>
                     </div>
                     <div class="industry-item">
-                        <div class="industry-icon">🎓</div>
+                        <div class="industry-icon"><i data-lucide="graduation-cap"></i></div>
                         <h4>Образование</h4>
                         <p>Студенты и оценки</p>
                     </div>
                     <div class="industry-item">
-                        <div class="industry-icon">🏭</div>
+                        <div class="industry-icon"><i data-lucide="factory"></i></div>
                         <h4>Производство</h4>
                         <p>Продукция и затраты</p>
                     </div>
                     <div class="industry-item">
-                        <div class="industry-icon">📢</div>
+                        <div class="industry-icon"><i data-lucide="megaphone"></i></div>
                         <h4>Маркетинг</h4>
                         <p>Кампании и ROI</p>
                     </div>
@@ -759,6 +773,12 @@
             </div>
         </section>
     </div>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 
     <script>
         (() => {
