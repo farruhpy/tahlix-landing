@@ -671,6 +671,121 @@
                 margin-bottom: 16px;
             }
         }
+        /* ═══════════════════════════════════════════════
+           REQUEST ACCESS FORM
+           ═══════════════════════════════════════════════ */
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 22px;
+            padding: 13px 26px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 100px;
+            box-shadow: 0 6px 20px var(--accent-glow);
+            opacity: 0;
+            transform: translateY(8px);
+            animation: fadeUp 0.7s 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px var(--accent-glow);
+        }
+
+        .request {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .request-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 32px;
+        }
+
+        .request-form .row {
+            display: flex;
+            gap: 14px;
+        }
+
+        .request-form .row > * {
+            flex: 1;
+        }
+
+        .request-form input,
+        .request-form textarea {
+            width: 100%;
+            padding: 14px 16px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .request-form input::placeholder,
+        .request-form textarea::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .request-form input:focus,
+        .request-form textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .request-form textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .request-submit {
+            padding: 15px 20px;
+            font-family: inherit;
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px var(--accent-glow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+
+        .request-submit:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 28px var(--accent-glow);
+        }
+
+        .request-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .request-status {
+            margin-top: 14px;
+            font-size: 0.9rem;
+            text-align: center;
+            min-height: 1.2em;
+        }
+
+        .request-status.ok { color: #34a853; }
+        .request-status.err { color: #ea4335; }
+
+        @media (max-width: 640px) {
+            .request-form .row { flex-direction: column; }
+        }
     </style>
     <script>
         // Set theme before first paint (no flash). Stored choice wins, else system.
@@ -724,6 +839,7 @@
                     <span class="pill-dot"></span>
                     Скоро запуск
                 </div>
+                <a href="#request" class="hero-cta">Оставить заявку</a>
             </div>
 
             <div class="scroll-hint">
@@ -814,6 +930,30 @@
 
                 <div class="divider"></div>
 
+                <div class="request reveal" id="request">
+                    <h2 class="section-title">Оставить <span class="accent">заявку</span></h2>
+                    <p class="section-sub">Заполните форму — мы свяжемся с вами и подключим ваш бизнес.</p>
+                    <form class="request-form" id="request-form" novalidate>
+                        <div class="row">
+                            <input type="text" name="business_name" placeholder="Название бизнеса *" required
+                                maxlength="200" autocomplete="organization">
+                            <input type="text" name="owner_name" placeholder="Ваше имя *" required
+                                maxlength="200" autocomplete="name">
+                        </div>
+                        <div class="row">
+                            <input type="tel" name="phone" placeholder="Телефон *" required
+                                maxlength="50" autocomplete="tel">
+                            <input type="email" name="email" placeholder="Email (необязательно)"
+                                maxlength="255" autocomplete="email">
+                        </div>
+                        <textarea name="note" placeholder="Комментарий (необязательно)" maxlength="2000"></textarea>
+                        <button type="submit" class="request-submit" id="request-submit">Отправить заявку</button>
+                        <p class="request-status" id="request-status"></p>
+                    </form>
+                </div>
+
+                <div class="divider"></div>
+
                 <footer class="footer">
                     <div class="footer-inner">
                         <div class="footer-contacts">
@@ -869,6 +1009,58 @@
                     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
                     document.documentElement.setAttribute('data-theme', next);
                     localStorage.setItem('tahlix-theme', next);
+                });
+            }
+
+            // ═══════════════════════════════════════════════
+            // REQUEST ACCESS FORM → POST to the Tahlix API
+            // ═══════════════════════════════════════════════
+            const API_BASE = 'https://app.tahlix.uz';
+            const reqForm = document.getElementById('request-form');
+            if (reqForm) {
+                const statusEl = document.getElementById('request-status');
+                const submitEl = document.getElementById('request-submit');
+                reqForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const fd = new FormData(reqForm);
+                    const payload = {
+                        business_name: (fd.get('business_name') || '').trim(),
+                        owner_name: (fd.get('owner_name') || '').trim(),
+                        phone: (fd.get('phone') || '').trim(),
+                        email: (fd.get('email') || '').trim() || null,
+                        note: (fd.get('note') || '').trim() || null,
+                    };
+                    if (!payload.business_name || !payload.owner_name || !payload.phone) {
+                        statusEl.textContent = 'Заполните обязательные поля (*).';
+                        statusEl.className = 'request-status err';
+                        return;
+                    }
+                    submitEl.disabled = true;
+                    statusEl.textContent = 'Отправляем…';
+                    statusEl.className = 'request-status';
+                    try {
+                        const res = await fetch(API_BASE + '/api/v1/access-requests', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                        });
+                        if (res.ok) {
+                            reqForm.reset();
+                            statusEl.textContent = '✓ Заявка отправлена! Мы свяжемся с вами.';
+                            statusEl.className = 'request-status ok';
+                        } else if (res.status === 429) {
+                            statusEl.textContent = 'Слишком много попыток. Попробуйте позже.';
+                            statusEl.className = 'request-status err';
+                        } else {
+                            statusEl.textContent = 'Ошибка отправки. Проверьте данные и попробуйте снова.';
+                            statusEl.className = 'request-status err';
+                        }
+                    } catch (err) {
+                        statusEl.textContent = 'Сеть недоступна. Попробуйте позже.';
+                        statusEl.className = 'request-status err';
+                    } finally {
+                        submitEl.disabled = false;
+                    }
                 });
             }
 
