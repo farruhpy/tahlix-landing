@@ -936,13 +936,13 @@
                     <form class="request-form" id="request-form" novalidate>
                         <div class="row">
                             <input type="text" name="business_name" placeholder="Название бизнеса *" required
-                                maxlength="200" autocomplete="organization">
+                                minlength="2" maxlength="200" autocomplete="organization">
                             <input type="text" name="owner_name" placeholder="Ваше имя *" required
-                                maxlength="200" autocomplete="name">
+                                minlength="2" maxlength="200" autocomplete="name">
                         </div>
                         <div class="row">
-                            <input type="tel" name="phone" placeholder="Телефон *" required
-                                maxlength="50" autocomplete="tel">
+                            <input type="tel" name="phone" placeholder="Телефон * (напр. +998901234567)" required
+                                minlength="5" maxlength="50" autocomplete="tel">
                             <input type="email" name="email" placeholder="Email (необязательно)"
                                 maxlength="255" autocomplete="email">
                         </div>
@@ -1030,8 +1030,22 @@
                         email: (fd.get('email') || '').trim() || null,
                         note: (fd.get('note') || '').trim() || null,
                     };
-                    if (!payload.business_name || !payload.owner_name || !payload.phone) {
-                        statusEl.textContent = 'Заполните обязательные поля (*).';
+                    const FIELD_LABELS = {
+                        business_name: 'Название бизнеса', owner_name: 'Ваше имя',
+                        phone: 'Телефон', email: 'Email', note: 'Комментарий',
+                    };
+                    if (!payload.business_name || payload.business_name.length < 2) {
+                        statusEl.textContent = 'Укажите название бизнеса (минимум 2 символа).';
+                        statusEl.className = 'request-status err';
+                        return;
+                    }
+                    if (!payload.owner_name || payload.owner_name.length < 2) {
+                        statusEl.textContent = 'Укажите ваше имя (минимум 2 символа).';
+                        statusEl.className = 'request-status err';
+                        return;
+                    }
+                    if (!payload.phone || payload.phone.length < 5) {
+                        statusEl.textContent = 'Укажите корректный номер телефона.';
                         statusEl.className = 'request-status err';
                         return;
                     }
@@ -1051,8 +1065,20 @@
                         } else if (res.status === 429) {
                             statusEl.textContent = 'Слишком много попыток. Попробуйте позже.';
                             statusEl.className = 'request-status err';
+                        } else if (res.status === 422) {
+                            let text = 'Проверьте правильность заполнения полей.';
+                            try {
+                                const body = await res.json();
+                                const first = body.detail && body.detail[0];
+                                if (first) {
+                                    const field = FIELD_LABELS[first.loc[first.loc.length - 1]] || 'Поле';
+                                    text = `${field}: заполнено некорректно.`;
+                                }
+                            } catch (_) { /* keep generic text */ }
+                            statusEl.textContent = text;
+                            statusEl.className = 'request-status err';
                         } else {
-                            statusEl.textContent = 'Ошибка отправки. Проверьте данные и попробуйте снова.';
+                            statusEl.textContent = 'Ошибка отправки. Попробуйте снова позже.';
                             statusEl.className = 'request-status err';
                         }
                     } catch (err) {
